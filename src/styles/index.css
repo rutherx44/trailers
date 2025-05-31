@@ -4,4 +4,6 @@
   /* website font sytle */
   --font-poppins: "Poppins", sans-serif;
   --font-roboto: "Roboto", sans-serif;
+
+  --container-8xl: 90rem;
 }
