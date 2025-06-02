@@ -1,11 +1,11 @@
 import React from "react";
 import "./styles/App.css";
-import Navbar from "./components/Navbar";
+import Lading from "./pages/Lading";
 
 const App = () => {
   return (
     <>
-      <Navbar />
+      <Lading />
     </>
   );
 };
