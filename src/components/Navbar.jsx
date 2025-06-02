@@ -6,7 +6,9 @@ const Navbar = () => {
   const sideContentRef = useRef();
   const searchRef = useRef();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [color, setColor] = useState("#ffffff");
 
+  /* Side menu function */
   const openMenu = () => {
     sideContentRef.current.style.transform = "translateX(-125rem)";
   };
@@ -14,19 +16,21 @@ const Navbar = () => {
     sideContentRef.current.style.transform = "translateX(125rem)";
   };
 
+  /* Search bar in mobile function */
   const openSearch = () => {
     setIsSearchOpen(true);
-    searchRef.current.style.transform = "translateY(7.5rem)";
-    console.log(setIsSearchOpen);
+    searchRef.current.style.transform = "translateX(125rem)";
+    setColor("#E50914");
   };
   const closeSearch = () => {
     setIsSearchOpen(false);
-    searchRef.current.style.transform = "translateY(-7.5rem)";
+    searchRef.current.style.transform = "translateX(-125rem)";
+    setColor("#ffffff");
   };
 
   return (
-    <nav id="home">
-      <div className="w-full flex sticky top-0 left-0 z-10 items-center justify-between bg-[#180102] h-16 px-4 md:h-20 md:px-8 lg:h-24 lg:px-16">
+    <nav id="home" className="relative">
+      <div className="w-full flex fixed top-0 left-0 z-10 items-center justify-between bg-[#180102] h-16 px-4 md:h-20 md:px-8 lg:h-24 lg:px-16">
         <a href="#home">
           <img
             className="cursor-pointer w-[8.125rem] md:w-[10.875rem] lg:w-[11.5rem]"
@@ -63,10 +67,11 @@ const Navbar = () => {
             <Search
               className="hover:text-[#E50914] transition-all w-6 h-6 md:w-8 md:h-8"
               onClick={() => (isSearchOpen ? closeSearch() : openSearch())}
+              color={color}
             />
           </button>
           <button
-            title="Chevron Left"
+            title="Open Menu"
             className="cursor-pointer"
             onClick={openMenu}
           >
@@ -81,7 +86,7 @@ const Navbar = () => {
         className="lg:hidden font-poppins text-lg flex fixed items-center justify-center flex-col gap-6 tracking-wider z-10 bg-[#180102] shadow-[0_0_1.875rem] shadow-[#490D0A] w-3/4 h-full top-0 bottom-0 -right-500 transition-all duration-600"
       >
         <button
-          title="X"
+          title="Close Menu"
           className="lg:hidden cursor-pointer absolute top-5 left-4 md:top-6 md:left-8"
           onClick={closeMenu}
         >
@@ -107,7 +112,7 @@ const Navbar = () => {
       {/* Mobile Search */}
       <div
         ref={searchRef}
-        className="lg:hidden z-5 w-full relative -top-30 left-0 right-0 flex items-center h-16 px-4 md:px-8 md:h-20 transition-all duration-500 bg-[#180102] opacity-90"
+        className="lg:hidden z-5 w-full fixed top-16 right-500 flex items-center h-16 px-4 md:top-20 md:px-8 md:h-20 transition-all duration-500 bg-[#180102] opacity-90"
       >
         <div className="w-full flex items-center text-[#ADADAD] focus-within:text-white">
           <Search
@@ -119,7 +124,7 @@ const Navbar = () => {
             name="search"
             placeholder="Search"
             autoComplete="off"
-            className="w-full text-white placeholder-[#ADADAD] px-2.5 py-2 rounded-sm bg-[#4D0407] pl-11 border-none focus:outline-2 focus:outline-[#E50914]"
+            className="w-full text-white placeholder-[#ADADAD] px-2.5 py-2 rounded-sm bg-[#4D0407] pl-11 border-none focus:outline-1 focus:outline-[#E50914]"
           />
         </div>
       </div>
