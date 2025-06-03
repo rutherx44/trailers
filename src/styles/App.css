@@ -19,16 +19,7 @@ body {
   border: 1px solid blue;
 }
 
-.image {
-  width: clamp(4.75rem, calc(8.5vw + 4.5rem), 12.1875rem);
-  height: clamp(0.875rem, calc(2vw + .5rem), 2.25rem);
-}
-
-.no_image {
-  font-size: clamp(0.5rem, calc(1vw + .2rem), 1.5rem);
-}
-
 .shade {
-  background: RGBA(24, 1, 2, 100);
-  background: linear-gradient(180deg, rgba(24, 1, 2, 0) 0%, rgba(24, 1, 2, 0.75) 75%);
+  background: #180102;
+  background: linear-gradient(180deg, rgba(24, 1, 2, 0) 0%, rgba(24, 1, 2, 100) 90%);
 }

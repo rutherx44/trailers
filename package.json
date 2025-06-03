@@ -11,10 +11,13 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.7",
+    "axios": "^1.9.0",
+    "dayjs": "^1.11.13",
     "lucide-react": "^0.511.0",
     "react": "^19.1.0",
     "react-circular-progressbar": "^2.2.0",
     "react-dom": "^19.1.0",
+    "swiper": "^11.2.8",
     "tailwindcss": "^4.1.7"
   },
   "devDependencies": {
