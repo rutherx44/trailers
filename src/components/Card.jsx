@@ -88,10 +88,11 @@ export const HeroCard = (props) => {
 
 export const MovieCard = (props) => {
   return (
-    <div className="w-fit flex flex-col gap-1">
+    <div className="w-fit flex flex-col">
       <div className="w-full h-full rounded-md">
         {(
           <img
+            title={props.data.title || props.data.name}
             className="cursor-pointer w-[12.4375rem] h-[7.625rem] rounded-md"
             src={`https://image.tmdb.org/t/p/w500${props.data.backdrop_path}`}
             alt={props.data.id}
@@ -104,15 +105,23 @@ export const MovieCard = (props) => {
           />
         )}
       </div>
-      <div className="w-[12.4375rem] p-2">
+      <div className="w-[12.4375rem]">
         <div className="flex gap-1.5 justify-between items-center">
-          <div className="flex flex-col truncate">
-            <p className="text-sm font-semibold lg:text-base truncate">
-              {props.data.title || props.data.name}
-            </p>
-            <p className="text-xs font-semibold lg:text-sm xl:text-base">
-              {dayjs(props.data.release_date).format("YYYY")}
-            </p>
+          <div className="flex items-center gap-2 truncate">
+            <div className="text-[#E50914] font-roboto font-black text-[2.5rem]">
+              {props.num + 1}
+            </div>
+            <div className="flex flex-col truncate">
+              <p
+                title={props.data.title || props.data.name}
+                className="text-sm font-semibold lg:text-base truncate"
+              >
+                {props.data.title || props.data.name}
+              </p>
+              <p className="text-xs font-semibold lg:text-sm xl:text-base">
+                {dayjs(props.data.release_date).format("YYYY")}
+              </p>
+            </div>
           </div>
           <div className="">
             <Rating rating={Number(props.data.vote_average).toFixed(1)} />
