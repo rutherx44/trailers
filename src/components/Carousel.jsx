@@ -32,7 +32,6 @@ const Carousel = () => {
       data: { results },
     } = await axios.get(`${BASE_URL}/trending/movie/day`, options);
     setMovies(results);
-    console.log(results);
   };
 
   useEffect(() => {
@@ -49,22 +48,22 @@ const Carousel = () => {
         <div>
           <Swiper
             modules={[Navigation, Pagination]}
-            slidesPerView={2}
+            slidesPerView={3}
             loop={true}
             pagination={true}
             breakpoints={{
-              520: { slidesPerView: 3 },
-              768: { slidesPerView: 4 },
-              1024: { slidesPerView: 5 },
-              1280: { slidesPerView: 6 },
-              1536: { slidesPerView: 7 },
+              520: { slidesPerView: 4, loop: true },
+              768: { slidesPerView: 5, loop: true },
+              1024: { slidesPerView: 6, loop: true },
+              1280: { slidesPerView: 9, loop: true },
+              1536: { slidesPerView: 9, loop: true },
             }}
             navigation
             className="swiper-carousel"
           >
             {movies.slice(0, 10).map((movie, idx) => (
               <SwiperSlide key={idx} className="w-fit! pl-2.5 cursor-pointer">
-                <MovieCard data={movie} />
+                <MovieCard data={movie} num={idx} />
               </SwiperSlide>
             ))}
           </Swiper>
