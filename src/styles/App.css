@@ -23,3 +23,85 @@ body {
   background: #180102;
   background: linear-gradient(180deg, rgba(24, 1, 2, 0) 0%, rgba(24, 1, 2, 100) 90%);
 }
+
+/*? Swiper */
+.swiper-button-next {
+  justify-content: right !important;
+  padding-right: 1rem;
+  top: 50% !important;
+  right: 0 !important;
+  margin-top: 0 !important;
+  visibility: hidden;
+  height: 100% !important;
+  width: 10rem !important;
+  transform: translateY(-50%) !important;
+  transition: visibility 0.2s ease-in-out;
+  color: #E50914 !important;
+  background: rgb(24, 1, 2);
+  background: linear-gradient(90deg, rgba(16, 16, 16, 0) 0%, rgba(24, 1, 2, 1) 100%);
+}
+
+.swiper:hover .swiper-button-next,
+.swiper:hover .swiper-button-prev {
+  visibility: visible;
+}
+
+.swiper .swiper-button-next:active,
+.swiper .swiper-button-prev:active {
+  visibility: visible;
+  color: #4D0407 !important;
+}
+
+.swiper-button-prev {
+  justify-content: left !important;
+  padding-left: 1rem;
+  top: 50% !important;
+  left: 0 !important;
+  margin-top: 0 !important;
+  visibility: hidden;
+  height: 100% !important;
+  width: 10rem !important;
+  transform: translateY(-50%) !important;
+  transition: visibility color 0.2s ease-in-out;
+  color: #E50914 !important;
+  background: rgb(24, 1, 2);
+  background: linear-gradient(90deg, rgba(24, 1, 2, 1) 0%, rgba(16, 16, 16, 0) 100%);
+}
+
+.swiper-carousel {
+  display: flex !important;
+  padding-top: 22px !important;
+  padding-left: 6px !important;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #E50914 !important;
+}
+
+.swiper-pagination-bullet {
+  width: 14px !important;
+  height: 2px !important; 
+  background-color: rgba(229, 9, 20, 50%) !important;
+}
+
+.swiper-pagination-horizontal {
+  display: flex;
+  justify-content: end;
+  height: fit-content;
+  top: 0 !important;
+  padding-right: 1rem;
+}
+
+@media (max-width: 640px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    width: 11rem !important;
+  }
+}

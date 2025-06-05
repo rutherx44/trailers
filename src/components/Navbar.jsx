@@ -29,7 +29,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav id="home" className="relative">
+    <nav id="/" className="relative">
       <div className="w-full flex fixed top-0 left-0 z-10 items-center justify-between bg-[#180102] h-16 px-4 md:h-20 md:px-8 lg:h-24 lg:px-16">
         <a href="#home">
           <img

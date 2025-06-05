@@ -6,7 +6,7 @@ import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/autoplay";
 
-import Card from "./Card";
+import { HeroCard } from "./Card";
 
 const Hero = () => {
   const [moviesBackdrop, setMoviesBackdrop] = useState([]);
@@ -49,7 +49,7 @@ const Hero = () => {
         >
           {moviesBackdrop.map((movie, idx) => (
             <SwiperSlide key={idx} className="mt-16 md:mt-20 lg:mt-24">
-              <Card data={movie} />
+              <HeroCard data={movie} />
             </SwiperSlide>
           ))}
         </Swiper>

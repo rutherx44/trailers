@@ -9,6 +9,7 @@ const Lading = () => {
       <Navbar />
       <Hero />
       <Carousel />
+      <Carousel />
     </>
   );
 };
