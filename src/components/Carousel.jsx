@@ -49,8 +49,8 @@ const Carousel = () => {
         <div>
           <Swiper
             modules={[Navigation, Pagination]}
-            loop={true}
             slidesPerView={2}
+            loop={true}
             pagination={true}
             breakpoints={{
               520: { slidesPerView: 3 },
@@ -63,7 +63,7 @@ const Carousel = () => {
             className="swiper-carousel"
           >
             {movies.slice(0, 10).map((movie, idx) => (
-              <SwiperSlide key={idx} className="w-auto! pl-2.5 cursor-pointer">
+              <SwiperSlide key={idx} className="w-fit! pl-2.5 cursor-pointer">
                 <MovieCard data={movie} />
               </SwiperSlide>
             ))}

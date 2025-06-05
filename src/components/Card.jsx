@@ -88,7 +88,7 @@ export const HeroCard = (props) => {
 
 export const MovieCard = (props) => {
   return (
-    <div className="flex flex-col gap-1">
+    <div className="w-fit flex flex-col gap-1">
       <div className="w-full h-full rounded-md">
         {(
           <img
@@ -104,7 +104,7 @@ export const MovieCard = (props) => {
           />
         )}
       </div>
-      <div className="w-[12.4375rem] py-2">
+      <div className="w-[12.4375rem] p-2">
         <div className="flex gap-1.5 justify-between items-center">
           <div className="flex flex-col truncate">
             <p className="text-sm font-semibold lg:text-base truncate">
