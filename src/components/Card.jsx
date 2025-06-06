@@ -88,7 +88,7 @@ export const HeroCard = (props) => {
 
 export const MovieCard = (props) => {
   return (
-    <div className="w-fit flex flex-col">
+    <div className="w-fit flex flex-col gap-1 lg:gap-2">
       <div className="w-[12.4375rem] h-[7.625rem] md:w-[14.25rem] md:h-[8rem] lg:w-[15.875rem] lg:h-[9rem] rounded-md transition-all">
         {(
           <img
@@ -105,7 +105,7 @@ export const MovieCard = (props) => {
           />
         )}
       </div>
-      <div className="w-[12.4375rem] md:w-[14.25rem] lg:w-[15.875rem] mt-1 transition-all">
+      <div className="w-[12.4375rem] md:w-[14.25rem] lg:w-[15.875rem] transition-all">
         <div className="flex gap-1.5 justify-between items-center">
           <div className="flex items-center gap-2 truncate">
             <div className="text-[#E50914] font-roboto font-black text-[2.5rem] md:text-[2.75rem] lg:text-5xl">
@@ -178,7 +178,7 @@ export const TrailerCard = ({ data, videos }) => {
 
 export const LatestCard = (props) => {
   return (
-    <div className="w-fit flex flex-col">
+    <div className="w-fit flex flex-col gap-1 lg:gap-2">
       <div className="w-[12.4375rem] h-[7.625rem] md:w-[14.25rem] md:h-[8rem] lg:w-[15.875rem] lg:h-[9rem] rounded-md transition-all">
         {(
           <img
@@ -195,7 +195,7 @@ export const LatestCard = (props) => {
           />
         )}
       </div>
-      <div className="w-[12.4375rem] md:w-[14.25rem] lg:w-[15.875rem] mt-1 transition-all">
+      <div className="w-[12.4375rem] md:w-[14.25rem] lg:w-[15.875rem] transition-all">
         <div className="flex gap-1.5 justify-between items-center">
           <div className="flex items-center gap-2 truncate">
             <div className="flex flex-col truncate">

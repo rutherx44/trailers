@@ -2,6 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { TrailerCard } from "./Card";
 
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode, Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/free-mode";
+
 const Trailer = () => {
   const [movies, setMovies] = useState([]);
   const [videos, setVideos] = useState([]);
@@ -30,13 +36,17 @@ const Trailer = () => {
 
     if (nowPlaying.length === 0) return;
 
-    const firstMovieId = nowPlaying[0].id;
+    // Pick one random movie
+    const randomMovie =
+      nowPlaying[Math.floor(Math.random() * nowPlaying.length)];
 
+    // Fetch videos for the random movie
     const {
       data: { results: videoResults },
-    } = await axios.get(`${BASE_URL}/movie/${firstMovieId}/videos`, options);
+    } = await axios.get(`${BASE_URL}/movie/${randomMovie.id}/videos`, options);
 
-    setMovies(nowPlaying);
+    // Only set the random movie in the state
+    setMovies([randomMovie]); // Note the brackets to keep it an array
     setVideos(videoResults);
   };
 
