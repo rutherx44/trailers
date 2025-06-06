@@ -72,6 +72,7 @@ body {
   width: 100% !important;
   display: flex !important;
   padding-top: 22px !important;
+  padding-left: 6px !important;
 }
 
 .swiper-wrapper {

@@ -36,17 +36,14 @@ const Trailer = () => {
 
     if (nowPlaying.length === 0) return;
 
-    // Pick one random movie
     const randomMovie =
       nowPlaying[Math.floor(Math.random() * nowPlaying.length)];
 
-    // Fetch videos for the random movie
     const {
       data: { results: videoResults },
     } = await axios.get(`${BASE_URL}/movie/${randomMovie.id}/videos`, options);
 
-    // Only set the random movie in the state
-    setMovies([randomMovie]); // Note the brackets to keep it an array
+    setMovies([randomMovie]);
     setVideos(videoResults);
   };
 

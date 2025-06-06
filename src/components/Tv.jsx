@@ -19,6 +19,7 @@ export const Tv = () => {
   const options = {
     params: {
       language: "en-US",
+      include_image_language: "en",
     },
     headers: {
       accept: "application/json",
@@ -30,7 +31,29 @@ export const Tv = () => {
     const {
       data: { results },
     } = await axios.get(`${BASE_URL}/trending/tv/day`, options);
-    setShows(results);
+
+    // Fetch genres and English backdrops for each movie
+    const showsDetailsPromises = results.map(async (item) => {
+      const [detailsResponse, imagesResponse] = await Promise.all([
+        axios.get(`${BASE_URL}/tv/${item.id}`, options),
+        axios.get(`${BASE_URL}/tv/${item.id}/images?`, options),
+      ]);
+
+      const englishBackdrops = imagesResponse.data.backdrops || [];
+      const firstBackdrop =
+        englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
+
+      return {
+        ...item,
+        genres: detailsResponse.data.genres || [],
+        englishBackdrop: firstBackdrop
+          ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
+          : item.backdrop_path,
+      };
+    });
+
+    const showsWithDetails = await Promise.all(showsDetailsPromises);
+    setShows(showsWithDetails);
   };
 
   useEffect(() => {
@@ -79,6 +102,7 @@ export const LatestTv = () => {
   const options = {
     params: {
       language: "en-US",
+      include_image_language: "en",
     },
     headers: {
       accept: "application/json",
@@ -90,7 +114,29 @@ export const LatestTv = () => {
     const {
       data: { results },
     } = await axios.get(`${BASE_URL}/tv/popular`, options);
-    setLatestShows(results);
+
+    // Fetch genres and English backdrops for each movie
+    const showsDetailsPromises = results.map(async (item) => {
+      const [detailsResponse, imagesResponse] = await Promise.all([
+        axios.get(`${BASE_URL}/tv/${item.id}`, options),
+        axios.get(`${BASE_URL}/tv/${item.id}/images?`, options),
+      ]);
+
+      const englishBackdrops = imagesResponse.data.backdrops || [];
+      const firstBackdrop =
+        englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
+
+      return {
+        ...item,
+        genres: detailsResponse.data.genres || [],
+        englishBackdrop: firstBackdrop
+          ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
+          : item.backdrop_path,
+      };
+    });
+
+    const showsWithDetails = await Promise.all(showsDetailsPromises);
+    setLatestShows(showsWithDetails);
   };
 
   useEffect(() => {
