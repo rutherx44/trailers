@@ -21,7 +21,7 @@ body {
 
 .shade {
   background: #180102;
-  background: linear-gradient(180deg, rgba(24, 1, 2, 0) 0%, rgba(24, 1, 2, 100) 90%);
+  background: linear-gradient(180deg, rgba(24, 1, 2, .3) 0%, rgba(24, 1, 2, 1) 85%);
 }
 
 /*? Swiper */
@@ -72,6 +72,10 @@ body {
   width: 100% !important;
   display: flex !important;
   padding-top: 22px !important;
+}
+
+.swiper-wrapper {
+  width: 100% !important;
   padding-left: 6px !important;
 }
 
@@ -80,8 +84,9 @@ body {
 }
 
 .swiper-pagination-bullet {
-  width: 14px !important;
-  height: 2px !important; 
+  width: 16px !important;
+  height: 2px !important;
+  border-radius: 6px !important;
   background-color: rgba(229, 9, 20, 50%) !important;
 }
 
@@ -100,9 +105,32 @@ body {
   }
 }
 
+@media (min-width: 768px) {
+  .swiper-wrapper {
+    margin-left: 20px !important;
+  }
+
+  .swiper-pagination-horizontal {
+    padding-right: 2rem;
+  }
+}
+
 @media (min-width: 1024px) {
   .swiper-button-next,
   .swiper-button-prev {
     width: 11rem !important;
+  }
+
+  .swiper-wrapper {
+    margin-left: 50px !important;
+  }
+
+  .swiper-pagination-horizontal {
+    padding-right: 4rem;
+  }
+
+  .swiper-pagination-bullet {
+    width: 28px !important;
+    height: 4px !important;
   }
 }
