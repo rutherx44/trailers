@@ -62,17 +62,17 @@ export const HeroCard = (props) => {
               </div>
               <div>
                 <p className="font-poppins flex items-center uppercase">
-                  <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] rounded-full text-white tracking-widest text-[0.5rem] md:text-[] lg:text-xs">
+                  <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] rounded-full text-white tracking-widest text-[0.5rem] md:text-[0.625rem] lg:text-xs">
                     {props.data.media_type}
                   </span>
                   <Dot />
-                  <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] rounded-full text-white tracking-widest text-[0.5rem] md:text-[] lg:text-xs">
+                  <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] rounded-full text-white tracking-widest text-[0.5rem] md:text-[0.625rem] lg:text-xs">
                     {dayjs(props.data.release_date).format("YYYY")}
                   </span>
                   <Dot />
                   {props.data.genres.slice(0, 1).map((genre, idx, arr) => (
                     <span key={idx} className="flex items-center">
-                      <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] rounded-full text-white tracking-widest text-[0.5rem] md:text-[] lg:text-xs">
+                      <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] rounded-full text-white tracking-widest text-[0.5rem] md:text-[0.625rem] lg:text-xs">
                         {genre.name}
                       </span>
                       {idx < arr.length - 1 && (
@@ -116,7 +116,7 @@ export const MovieCard = (props) => {
             <div className="text-[#E50914] font-roboto font-black text-[2.5rem] md:text-[2.75rem] lg:text-5xl">
               {props.num + 1}
             </div>
-            <div className="flex flex-col truncate">
+            <div className="flex flex-col text-[#adadad] truncate">
               <p
                 title={props.data.title || props.data.name}
                 className="font-bold tracking-widest transition-all text-xs lg:text-sm truncate"
@@ -164,7 +164,7 @@ export const TrailerCard = ({ data, videos }) => {
       <div className="w-full transition-all mt-2.5">
         <div className="flex gap-1.5 justify-between items-center">
           <div className="flex items-center gap-2 truncate">
-            <div className="flex flex-col truncate">
+            <div className="flex flex-col text-[#adadad] truncate">
               <p
                 title={data.title || data.name}
                 className="font-poppins font-bold tracking-widest transition-all text-sm md:text-base lg:text-lg truncate"
@@ -205,7 +205,7 @@ export const LatestCard = (props) => {
       <div className="w-[12.4375rem] md:w-[14.25rem] lg:w-[15.875rem] transition-all">
         <div className="flex gap-1.5 justify-between items-center">
           <div className="flex items-center gap-2 truncate">
-            <div className="flex flex-col truncate">
+            <div className="flex flex-col text-[#adadad] truncate">
               <p
                 title={props.data.title || props.data.name}
                 className="font-bold tracking-widest transition-all text-xs lg:text-sm truncate"
