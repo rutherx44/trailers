@@ -26,7 +26,7 @@ export const HeroCard = (props) => {
             className="cursor-pointer w-full h-full rounded-md"
             src={
               props.data.backdrop_path
-                ? `https://image.tmdb.org/t/p/w500${props.data.backdrop_path}`
+                ? `https://image.tmdb.org/t/p/original${props.data.backdrop_path}`
                 : "/no-image-landscape.svg"
             }
             alt={props.data.id}
@@ -104,7 +104,7 @@ export const MovieCard = (props) => {
           className="cursor-pointer w-full h-full rounded-md"
           src={
             props.data.englishBackdrop
-              ? `https://image.tmdb.org/t/p/w500${props.data.englishBackdrop}`
+              ? `https://image.tmdb.org/t/p/original${props.data.englishBackdrop}`
               : "/no-image-landscape.svg"
           }
           alt={props.data.id}
@@ -145,8 +145,6 @@ export const MovieCard = (props) => {
 
 export const TrailerCard = ({ data, videos }) => {
   const videoKey = videos.length > 0 ? videos[0].key : null;
-  console.log(data, videos);
-
   return (
     <div className="w-full h-full flex flex-col md:w-[44rem] lg:w-[62rem] xl:w-[74rem] transition-all">
       <div className="w-full h-full transition-all">
@@ -198,7 +196,7 @@ export const LatestCard = (props) => {
           className="cursor-pointer w-full h-full rounded-md"
           src={
             props.data.englishBackdrop
-              ? `https://image.tmdb.org/t/p/w500${props.data.englishBackdrop}`
+              ? `https://image.tmdb.org/t/p/original${props.data.englishBackdrop}`
               : "/no-image-landscape.svg"
           }
           alt={props.data.id}
@@ -229,6 +227,23 @@ export const LatestCard = (props) => {
             <Rating rating={Number(props.data.vote_average).toFixed(1)} />
           </div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+export const GenreCard = ({ data, gradientClass }) => {
+  return (
+    <div className="w-fit flex flex-col gap-1 lg:gap-2">
+      <div
+        className={`flex items-end px-4 pb-4 rounded-md w-[12.4375rem] h-[7.625rem] md:w-[14.25rem] md:h-[8rem] lg:w-[15.875rem] lg:h-[9rem] ${gradientClass}`}
+      >
+        <p
+          title={data.name}
+          className="w-full font-bold tracking-widest transition-all text-xs md:text-base lg:text-lg truncate"
+        >
+          {data.name}
+        </p>
       </div>
     </div>
   );
