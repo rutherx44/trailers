@@ -37,23 +37,33 @@ const Content = () => {
         </div>
         <div className="w-[15rem] flex flex-wrap items-center justify-center gap-x-10 gap-y-10 md:w-full">
           <div className="w-[5.625rem] flex flex-col items-center font-poppins text-[#adadad] gap-2.5">
-            <Smartphone className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125] lg:h-[3.125rem]" />
+            <div className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125] lg:h-[3.125rem]">
+              <Smartphone />
+            </div>
             <p>Phone</p>
           </div>
           <div className="w-[5.625rem] flex flex-col items-center font-poppins text-[#adadad] gap-2.5">
-            <Tablet className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125] lg:h-[3.125rem]" />
+            <div className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125] lg:h-[3.125rem]">
+              <Tablet />
+            </div>
             <p>Tablet</p>
           </div>
           <div className="w-[5.625rem] flex flex-col items-center font-poppins text-[#adadad] gap-2.5">
-            <LaptopMinimal className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125] lg:h-[3.125rem]" />
+            <div className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125] lg:h-[3.125rem]">
+              <LaptopMinimal />
+            </div>
             <p>Laptop</p>
           </div>
           <div className="w-[5.625rem] flex flex-col items-center font-poppins text-[#adadad] gap-2.5">
-            <Monitor className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125] lg:h-[3.125rem]" />
+            <div className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125] lg:h-[3.125rem]">
+              <Monitor />
+            </div>
             <p>Desktop</p>
           </div>
           <div className="w-[5.625rem] flex flex-col items-center font-poppins text-[#adadad] gap-2.5">
-            <TvMinimal className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125] lg:h-[3.125rem]" />
+            <div className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125] lg:h-[3.125rem]">
+              <TvMinimal />
+            </div>
             <p>Smart TV</p>
           </div>
         </div>

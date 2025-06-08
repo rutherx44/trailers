@@ -52,7 +52,7 @@ const Lading = () => {
           <Genres />
         </div>
       </section>
-      <section className="mt-20 lg:mt-40 flex flex-col gap-10 lg:gap-20">
+      <section className="mt-20 lg:mt-40">
         <Content />
       </section>
     </>
