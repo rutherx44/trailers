@@ -178,7 +178,7 @@ export const TrailerCard = ({ data, videos }) => {
           </div>
           <div>
             <a href="/">
-              <Button icon={<Info />} displayText="VIEW DETAILS" />
+              <Button icon={<Info />} displayText="MORE INFO" />
             </a>
           </div>
         </div>

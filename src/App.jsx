@@ -1,13 +1,24 @@
 import React from "react";
 import "./styles/App.css";
-import Lading from "./pages/Lading";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Landing from "./pages/Landing";
+import MovieDetails from "./pages/MovieDetails";
+import TvDetails from "./pages/TvDetails";
+import Footer from "./components/Footer";
 
 const App = () => {
   return (
     <>
-      <Navbar />
-      <Lading />
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/movie/:id" element={<MovieDetails />} />
+          <Route path="/tv/:id" element={<TvDetails />} />
+        </Routes>
+        <Footer />
+      </Router>
     </>
   );
 };
