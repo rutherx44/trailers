@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
@@ -78,12 +79,14 @@ export const Tv = () => {
           navigation
           className="swiper-carousel"
         >
-          {shows.slice(0, 10).map((movie, idx) => (
+          {shows.slice(0, 10).map((shows, idx) => (
             <SwiperSlide
               key={idx}
               className="w-fit! pl-2.5 md:pl-3 lg:pl-3.5 xl:pl-4 cursor-pointer"
             >
-              <MovieCard data={movie} num={idx} />
+              <Link to={`/tv/${shows.id}`}>
+                <MovieCard data={shows} num={idx} />
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>
@@ -161,12 +164,99 @@ export const LatestTv = () => {
           navigation
           className="swiper-carousel"
         >
-          {latestShows.slice(0, 10).map((movie, idx) => (
+          {latestShows.slice(0, 10).map((shows, idx) => (
             <SwiperSlide
               key={idx}
               className="w-fit! pl-2.5 md:pl-3 lg:pl-3.5 xl:pl-4 cursor-pointer"
             >
-              <LatestCard data={movie} />
+              <Link to={`/tv/${shows.id}`}>
+                <LatestCard data={shows} />
+              </Link>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    </>
+  );
+};
+
+export const SimilarTv = ({ id }) => {
+  const [similarShows, setSimilarShows] = useState([]);
+
+  const BASE_URL = "https://api.themoviedb.org/3";
+  const VITE_AUTH_KEY = import.meta.env.VITE_AUTH_KEY;
+  const fetchSimilarShows = useRef();
+
+  const options = {
+    params: {
+      language: "en-US",
+      include_image_language: "en",
+    },
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${VITE_AUTH_KEY}`,
+    },
+  };
+
+  fetchSimilarShows.current = async () => {
+    const {
+      data: { results },
+    } = await axios.get(`${BASE_URL}/tv/${id}/similar?`, options);
+
+    // Fetch genres and English backdrops for each movie
+    const showsDetailsPromises = results.map(async (item) => {
+      const [detailsResponse, imagesResponse] = await Promise.all([
+        axios.get(`${BASE_URL}/tv/${item.id}`, options),
+        axios.get(`${BASE_URL}/tv/${item.id}/images?`, options),
+      ]);
+
+      const englishBackdrops = imagesResponse.data.backdrops || [];
+      const firstBackdrop =
+        englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
+
+      return {
+        ...item,
+        genres: detailsResponse.data.genres || [],
+        englishBackdrop: firstBackdrop
+          ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
+          : item.backdrop_path,
+      };
+    });
+
+    const showsWithDetails = await Promise.all(showsDetailsPromises);
+    setSimilarShows(showsWithDetails);
+  };
+
+  useEffect(() => {
+    fetchSimilarShows.current();
+  }, []);
+
+  return (
+    <>
+      <div>
+        <Swiper
+          modules={[Navigation, Pagination]}
+          slidesPerView={2}
+          spaceBetween={10}
+          loop={true}
+          pagination={true}
+          breakpoints={{
+            520: { slidesPerView: 4 },
+            768: { slidesPerView: 5, spaceBetween: 12 },
+            1024: { slidesPerView: 6, spaceBetween: 14 },
+            1280: { slidesPerView: 7, spaceBetween: 16 },
+          }}
+          navigation
+          className="swiper-carousel"
+        >
+          {similarShows.slice(0, 10).map((shows, idx) => (
+            <SwiperSlide
+              key={idx}
+              className="w-fit! pl-2.5 md:pl-3 lg:pl-3.5 xl:pl-4 cursor-pointer"
+            >
+              <Link to={`/tv/${shows.id}`}>
+                <LatestCard data={shows} />
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>

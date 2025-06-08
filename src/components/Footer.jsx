@@ -4,7 +4,7 @@ import footer_logo from "../assets/footer_logo.svg";
 const Footer = () => {
   return (
     <>
-      <div className="mb-4">
+      <div className="mb-4 mt-20 lg:mt-40">
         <div className="flex flex-col text-center font-poppins gap-10 px-4  md:flex-row md:justify-between md:px-8 lg:px-16">
           <div className="flex flex-col items-center gap-5 md:w-[10.375rem] lg:w-[13.875rem] md:items-start">
             <p className="w-fit py-1 px-2.5 border border-[#E50914] bg-[#490D0A] rounded-full text-white tracking-widest text-[0.5rem] md:text-[0.625rem] lg:text-xs">
