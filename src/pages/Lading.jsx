@@ -6,6 +6,7 @@ import { LatestTv, Tv } from "../components/Tv";
 import Trailer from "../components/Trailer";
 import Genres from "../components/Genre";
 import Content from "../components/Content";
+import Footer from "../components/Footer";
 
 const Lading = () => {
   return (
@@ -54,6 +55,9 @@ const Lading = () => {
       </section>
       <section className="mt-20 lg:mt-40">
         <Content />
+      </section>
+      <section className="mt-20 lg:mt-40">
+        <Footer />
       </section>
     </>
   );
