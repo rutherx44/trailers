@@ -75,11 +75,6 @@ body {
   padding-left: 6px !important;
 }
 
-.swiper-wrapper {
-  width: 100% !important;
-  padding-left: 6px !important;
-}
-
 .swiper-pagination-bullet-active {
   background-color: #E50914 !important;
 }
@@ -107,8 +102,8 @@ body {
 }
 
 @media (min-width: 768px) {
-  .swiper-wrapper {
-    margin-left: 20px !important;
+  .swiper-carousel {
+    padding-left: 20px !important;
   }
 
   .swiper-pagination-horizontal {
@@ -122,8 +117,8 @@ body {
     width: 11rem !important;
   }
 
-  .swiper-wrapper {
-    margin-left: 50px !important;
+  .swiper-carousel {
+    padding-left: 50px !important;
   }
 
   .swiper-pagination-horizontal {

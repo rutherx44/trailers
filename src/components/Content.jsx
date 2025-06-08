@@ -35,7 +35,7 @@ const Content = () => {
             </p>
           </div>
         </div>
-        <div className="w-[15rem] flex flex-wrap items-center justify-center gap-x-10 gap-y-10 md:w-full">
+        <div className="w-[15rem] flex flex-wrap items-center justify-center gap-x-10 gap-y-10 md:w-[40rem] md:justify-between lg:w-[48rem]">
           <div className="w-[5.625rem] h-auto flex flex-col items-center font-poppins text-[#adadad] gap-2.5">
             <div className="flex items-center justify-center">
               <Smartphone className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125rem] lg:h-[3.125rem]" />

@@ -11,7 +11,7 @@ export const HeroCard = (props) => {
         <div className="md:hidden">
           <img
             title={props.data.title || props.data.name}
-            className="cursor-pointer w-full h-full rounded-md"
+            className="cursor-pointer w-full h-full"
             src={
               props.data.poster_path
                 ? `https://image.tmdb.org/t/p/w500${props.data.poster_path}`
@@ -23,7 +23,7 @@ export const HeroCard = (props) => {
         <div className="hidden md:flex">
           <img
             title={props.data.title || props.data.name}
-            className="cursor-pointer w-full h-full rounded-md"
+            className="cursor-pointer w-full h-full"
             src={
               props.data.backdrop_path
                 ? `https://image.tmdb.org/t/p/original${props.data.backdrop_path}`
@@ -62,17 +62,17 @@ export const HeroCard = (props) => {
               </div>
               <div>
                 <p className="font-poppins flex items-center uppercase">
-                  <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] rounded-full text-white tracking-widest text-[0.5rem] md:text-[0.625rem] lg:text-xs">
+                  <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] bg-[#490D0A] rounded-full text-white tracking-widest text-[0.5rem] md:text-[0.625rem] lg:text-xs">
                     {props.data.media_type}
                   </span>
                   <Dot />
-                  <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] rounded-full text-white tracking-widest text-[0.5rem] md:text-[0.625rem] lg:text-xs">
+                  <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] bg-[#490D0A] rounded-full text-white tracking-widest text-[0.5rem] md:text-[0.625rem] lg:text-xs">
                     {dayjs(props.data.release_date).format("YYYY")}
                   </span>
                   <Dot />
                   {props.data.genres.slice(0, 1).map((genre, idx, arr) => (
                     <span key={idx} className="flex items-center">
-                      <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] rounded-full text-white tracking-widest text-[0.5rem] md:text-[0.625rem] lg:text-xs">
+                      <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] bg-[#490D0A] rounded-full text-white tracking-widest text-[0.5rem] md:text-[0.625rem] lg:text-xs">
                         {genre.name}
                       </span>
                       {idx < arr.length - 1 && (
