@@ -38,31 +38,31 @@ const Content = () => {
         <div className="w-[15rem] flex flex-wrap items-center justify-center gap-x-10 gap-y-10 md:w-full">
           <div className="w-[5.625rem] h-auto flex flex-col items-center font-poppins text-[#adadad] gap-2.5">
             <div className="flex items-center justify-center">
-              <Smartphone className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125] lg:h-[3.125rem]" />
+              <Smartphone className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125rem] lg:h-[3.125rem]" />
             </div>
             <p className="text-sm md:text-base lg:text-lg">Phone</p>
           </div>
           <div className="w-[5.625rem] h-auto flex flex-col items-center font-poppins text-[#adadad] gap-2.5">
             <div className="flex items-center justify-center">
-              <Tablet className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125] lg:h-[3.125rem]" />
+              <Tablet className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125rem] lg:h-[3.125rem]" />
             </div>
             <p className="text-sm md:text-base lg:text-lg">Tablet</p>
           </div>
           <div className="w-[5.625rem] h-auto flex flex-col items-center font-poppins text-[#adadad] gap-2.5">
             <div className="flex items-center justify-center">
-              <LaptopMinimal className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125] lg:h-[3.125rem]" />
+              <LaptopMinimal className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125rem] lg:h-[3.125rem]" />
             </div>
             <p className="text-sm md:text-base lg:text-lg">Laptop</p>
           </div>
           <div className="w-[5.625rem] h-auto flex flex-col items-center font-poppins text-[#adadad] gap-2.5">
             <div className="flex items-center justify-center">
-              <Monitor className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125] lg:h-[3.125rem]" />
+              <Monitor className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125rem] lg:h-[3.125rem]" />
             </div>
             <p className="text-sm md:text-base lg:text-lg">Desktop</p>
           </div>
           <div className="w-[5.625rem] h-auto flex flex-col items-center font-poppins text-[#adadad] gap-2.5">
             <div className="flex items-center justify-center">
-              <TvMinimal className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125] lg:h-[3.125rem]" />
+              <TvMinimal className="w-[2.125rem] h-[2.125rem] md:w-[2.625rem] md:h-[2.625rem] lg:w-[3.125rem] lg:h-[3.125rem]" />
             </div>
             <p className="text-sm md:text-base lg:text-lg">Smart TV</p>
           </div>
