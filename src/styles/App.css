@@ -94,6 +94,28 @@ body {
   padding-right: 1rem;
 }
 
+/* Custom Scrollbars Style */
+/* width */
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #180102;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #E50914;
+  border-radius: 0.3rem;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #4D0407;
+}
+
 @media (max-width: 640px) {
   .swiper-button-next,
   .swiper-button-prev {
