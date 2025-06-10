@@ -8,7 +8,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import { LatestCard, MovieCard } from "./Card";
+import { TopMovieCard, MovieCard } from "./Card";
 
 export const Tv = () => {
   const [shows, setShows] = useState([]);
@@ -85,7 +85,7 @@ export const Tv = () => {
               className="w-fit! pl-2.5 md:pl-3 lg:pl-3.5 xl:pl-4 cursor-pointer"
             >
               <Link to={`/tv/${shows.id}`}>
-                <MovieCard data={shows} num={idx} />
+                <TopMovieCard data={shows} num={idx} />
               </Link>
             </SwiperSlide>
           ))}
@@ -170,7 +170,7 @@ export const LatestTv = () => {
               className="w-fit! pl-2.5 md:pl-3 lg:pl-3.5 xl:pl-4 cursor-pointer"
             >
               <Link to={`/tv/${shows.id}`}>
-                <LatestCard data={shows} />
+                <MovieCard data={shows} />
               </Link>
             </SwiperSlide>
           ))}
@@ -255,7 +255,7 @@ export const SimilarTv = ({ id }) => {
               className="w-fit! pl-2.5 md:pl-3 lg:pl-3.5 xl:pl-4 cursor-pointer"
             >
               <Link to={`/tv/${shows.id}`}>
-                <LatestCard data={shows} />
+                <MovieCard data={shows} />
               </Link>
             </SwiperSlide>
           ))}

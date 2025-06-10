@@ -95,7 +95,7 @@ export const HeroCard = (props) => {
   );
 };
 
-export const MovieCard = (props) => {
+export const TopMovieCard = (props) => {
   return (
     <div className="w-fit flex flex-col gap-1 lg:gap-2">
       <div className="w-[12.4375rem] h-[7.625rem] md:w-[14.25rem] md:h-[8rem] lg:w-[15.875rem] lg:h-[9rem] rounded-md transition-all">
@@ -117,21 +117,25 @@ export const MovieCard = (props) => {
               {props.num + 1}
             </div>
             <div className="flex flex-col text-[#adadad] truncate">
-              <p
+              <div
                 title={props.data.title || props.data.name}
                 className="font-bold tracking-widest transition-all text-xs lg:text-sm truncate"
               >
                 {props.data.title || props.data.name}
-              </p>
-              <p className="flex items-center font-poppins font-normal tracking-widest transition-all text-xs lg:text-sm">
+              </div>
+              <div className="flex w-full items-center font-poppins font-normal tracking-widest truncate transition-all text-xs lg:text-sm">
                 {dayjs(props.data.release_date).format("YYYY")}
-                <Dot />
-                {props.data.genres?.slice(0, 1).map((genre, idx) => (
-                  <span key={idx} className="flex items-center">
+                {props.data.genres?.slice(0, 1).map((genre, idx, arr) => (
+                  <span key={idx} className="flex items-center truncate">
+                    {idx < arr.length - 0 && (
+                      <span className="text-white">
+                        <Dot />
+                      </span>
+                    )}
                     {genre.name}
                   </span>
                 ))}
-              </p>
+              </div>
             </div>
           </div>
           <div className="">
@@ -187,7 +191,7 @@ export const TrailerCard = ({ data, videos }) => {
   );
 };
 
-export const LatestCard = (props) => {
+export const MovieCard = (props) => {
   return (
     <div className="w-fit flex flex-col gap-1 lg:gap-2">
       <div className="w-[12.4375rem] h-[7.625rem] md:w-[14.25rem] md:h-[8rem] lg:w-[15.875rem] lg:h-[9rem] rounded-md transition-all">

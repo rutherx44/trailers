@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
+import { useContext } from "react";
+import { GenreContext } from "../contexts/GenreContext";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
@@ -8,10 +10,11 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import { LatestCard, MovieCard } from "./Card";
+import { TopMovieCard, MovieCard } from "./Card";
 
 export const Movie = () => {
   const [movies, setMovies] = useState([]);
+  const genres = useContext(GenreContext);
 
   const BASE_URL = "https://api.themoviedb.org/3";
   const VITE_AUTH_KEY = import.meta.env.VITE_AUTH_KEY;
@@ -35,18 +38,22 @@ export const Movie = () => {
 
     // Fetch genres and English backdrops for each movie
     const movieDetailsPromises = results.map(async (item) => {
-      const [detailsResponse, imagesResponse] = await Promise.all([
-        axios.get(`${BASE_URL}/movie/${item.id}`, options),
-        axios.get(`${BASE_URL}/movie/${item.id}/images?`, options),
-      ]);
+      const imagesResponse = await axios.get(
+        `${BASE_URL}/movie/${item.id}/images?`,
+        options
+      );
 
       const englishBackdrops = imagesResponse.data.backdrops || [];
       const firstBackdrop =
         englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
 
+      const movieGenres = item.genre_ids
+        .map((id) => genres.find((g) => g.id === id))
+        .filter(Boolean);
+
       return {
         ...item,
-        genres: detailsResponse.data.genres || [],
+        genres: movieGenres,
         englishBackdrop: firstBackdrop
           ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
           : item.backdrop_path,
@@ -58,8 +65,10 @@ export const Movie = () => {
   };
 
   useEffect(() => {
-    fetchTrendingMovie.current();
-  }, []);
+    if (genres.length > 0) {
+      fetchTrendingMovie.current();
+    }
+  }, [genres]);
 
   return (
     <>
@@ -85,7 +94,7 @@ export const Movie = () => {
               className="w-fit! pl-2.5 md:pl-3 lg:pl-3.5 xl:pl-4 cursor-pointer"
             >
               <Link to={`/movie/${movie.id}`}>
-                <MovieCard data={movie} num={idx} />
+                <TopMovieCard data={movie} num={idx} />
               </Link>
             </SwiperSlide>
           ))}
@@ -97,6 +106,7 @@ export const Movie = () => {
 
 export const LatestMovie = () => {
   const [latestMovie, setLatestMovie] = useState([]);
+  const genres = useContext(GenreContext);
 
   const BASE_URL = "https://api.themoviedb.org/3";
   const VITE_AUTH_KEY = import.meta.env.VITE_AUTH_KEY;
@@ -120,18 +130,22 @@ export const LatestMovie = () => {
 
     // Fetch genres and English backdrops for each movie
     const movieDetailsPromises = results.map(async (item) => {
-      const [detailsResponse, imagesResponse] = await Promise.all([
-        axios.get(`${BASE_URL}/movie/${item.id}`, options),
-        axios.get(`${BASE_URL}/movie/${item.id}/images?`, options),
-      ]);
+      const imagesResponse = await axios.get(
+        `${BASE_URL}/movie/${item.id}/images?`,
+        options
+      );
 
       const englishBackdrops = imagesResponse.data.backdrops || [];
       const firstBackdrop =
         englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
 
+      const movieGenres = item.genre_ids
+        .map((id) => genres.find((g) => g.id === id))
+        .filter(Boolean);
+
       return {
         ...item,
-        genres: detailsResponse.data.genres || [],
+        genres: movieGenres,
         englishBackdrop: firstBackdrop
           ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
           : item.backdrop_path,
@@ -143,8 +157,10 @@ export const LatestMovie = () => {
   };
 
   useEffect(() => {
-    fetchLatestMovie.current();
-  }, []);
+    if (genres.length > 0) {
+      fetchLatestMovie.current();
+    }
+  }, [genres]);
 
   return (
     <>
@@ -170,7 +186,7 @@ export const LatestMovie = () => {
               className="w-fit! pl-2.5 md:pl-3 lg:pl-3.5 xl:pl-4 cursor-pointer"
             >
               <Link to={`/movie/${movie.id}`}>
-                <LatestCard data={movie} />
+                <MovieCard data={movie} />
               </Link>
             </SwiperSlide>
           ))}
@@ -183,6 +199,7 @@ export const LatestMovie = () => {
 export const SimilarMovie = () => {
   const [similarMovie, setSimilarMovie] = useState([]);
   const { id } = useParams();
+  const genres = useContext(GenreContext);
 
   const BASE_URL = "https://api.themoviedb.org/3";
   const VITE_AUTH_KEY = import.meta.env.VITE_AUTH_KEY;
@@ -206,18 +223,22 @@ export const SimilarMovie = () => {
 
     // Fetch genres and English backdrops for each movie
     const movieDetailsPromises = results.map(async (item) => {
-      const [detailsResponse, imagesResponse] = await Promise.all([
-        axios.get(`${BASE_URL}/movie/${item.id}`, options),
-        axios.get(`${BASE_URL}/movie/${item.id}/images?`, options),
-      ]);
+      const imagesResponse = await axios.get(
+        `${BASE_URL}/movie/${item.id}/images?`,
+        options
+      );
 
       const englishBackdrops = imagesResponse.data.backdrops || [];
       const firstBackdrop =
         englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
 
+      const movieGenres = item.genre_ids
+        .map((id) => genres.find((g) => g.id === id))
+        .filter(Boolean);
+
       return {
         ...item,
-        genres: detailsResponse.data.genres || [],
+        genres: movieGenres,
         englishBackdrop: firstBackdrop
           ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
           : item.backdrop_path,
@@ -229,8 +250,10 @@ export const SimilarMovie = () => {
   };
 
   useEffect(() => {
-    fetchSimilarMovie.current();
-  }, [id]);
+    if (genres.length > 0) {
+      fetchSimilarMovie.current();
+    }
+  }, [id, genres]);
 
   return (
     <>
@@ -256,7 +279,7 @@ export const SimilarMovie = () => {
               className="w-fit! pl-2.5 md:pl-3 lg:pl-3.5 xl:pl-4 cursor-pointer"
             >
               <Link to={`/movie/${movie.id}`}>
-                <LatestCard data={movie} />
+                <MovieCard data={movie} />
               </Link>
             </SwiperSlide>
           ))}
