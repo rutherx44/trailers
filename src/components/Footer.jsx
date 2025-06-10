@@ -15,6 +15,12 @@ const Footer = () => {
                 href="/"
                 className="hover:text-[#E50914] transition-all cursor-pointer"
               >
+                Home
+              </a>
+              <a
+                href="/"
+                className="hover:text-[#E50914] transition-all cursor-pointer"
+              >
                 Browse
               </a>
               <a
@@ -40,7 +46,7 @@ const Footer = () => {
                 href="/"
                 className="hover:text-[#E50914] transition-all cursor-pointer"
               >
-                Instagram
+                Behance
               </a>
               <a
                 href="/"

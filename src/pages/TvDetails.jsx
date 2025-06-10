@@ -116,39 +116,39 @@ const TvDetails = () => {
               </div>
               <div className="flex flex-col gap-1 font-poppins mb-4 md:mb-5 lg:mb-6">
                 <h3 className="tracking-widest font-extrabold uppercase text-xs xs:text-sm lg:text-sm">
-                  Overview :
+                  Overview:
                 </h3>
-                <p className="w-full text-start text-wrap truncate line-clamp-2 text-xs tracking-wider transition-all md:line-clamp-4 lg:text-sm xl:line-clamp-6">
+                <div className="w-full text-start text-wrap truncate line-clamp-2 text-xs tracking-wider transition-all md:line-clamp-4 lg:text-sm xl:line-clamp-6">
                   {tvDetails.overview}
-                </p>
+                </div>
               </div>
               <div className="w-full flex justify-between gap-2.5">
                 <div className="w-full flex flex-col gap-2.5 tracking-widest text-xs xs:text-sm lg:text-sm truncate">
-                  <p className="flex gap-1 truncate">
-                    <p className="font-extrabold uppercase">Status :</p>
+                  <div className="flex gap-1 truncate">
+                    <div className="font-extrabold uppercase">Status:</div>
                     {tvDetails.status}
-                  </p>
-                  <p className="flex gap-1 truncate">
-                    <p className="font-extrabold uppercase">Duration :</p>
+                  </div>
+                  <div className="flex gap-1 truncate">
+                    <div className="font-extrabold uppercase">Duration:</div>
                     {tvDetails.runtime} mins
-                  </p>
-                  <p className="flex gap-1 truncate">
-                    <p className="font-extrabold uppercase">Language :</p>
+                  </div>
+                  <div className="flex gap-1 truncate">
+                    <div className="font-extrabold uppercase">Language:</div>
                     {tvDetails.spoken_languages?.[0]?.english_name ||
                       tvDetails.original_language}
-                  </p>
+                  </div>
                 </div>
                 <div className="w-full flex flex-col gap-2.5 tracking-widest text-xs xs:text-sm lg:text-sm truncate">
-                  <p className="flex gap-1 truncate">
-                    <p className="font-extrabold uppercase">Released :</p>
+                  <div className="flex gap-1 truncate">
+                    <div className="font-extrabold uppercase">Released:</div>
                     {dayjs(tvDetails.release_date).format("YYYY")}
-                  </p>
-                  <p className="flex items-center gap-1">
-                    <p className="font-extrabold uppercase">Ratings :</p>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="font-extrabold uppercase">Ratings:</div>
                     <Rating
                       rating={Number(tvDetails.vote_average).toFixed(1)}
                     />
-                  </p>
+                  </div>
                 </div>
               </div>
             </div>

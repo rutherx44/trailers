@@ -7,10 +7,12 @@ import { LatestTv } from "../components/Tv";
 import { Rating } from "../components/Rating";
 import { Dot } from "lucide-react";
 import Genres from "../components/Genre";
+import { useLoading } from "../contexts/LoadingContext";
 
 const MovieDetails = () => {
   const [movieDetails, setMovieDetails] = useState({});
   const { id } = useParams();
+  const { showLoading, hideLoading } = useLoading();
 
   const BASE_URL = "https://api.themoviedb.org/3";
   const VITE_AUTH_KEY = import.meta.env.VITE_AUTH_KEY;
@@ -25,13 +27,21 @@ const MovieDetails = () => {
   };
 
   fetchMovieDetails.current = async () => {
-    const { data } = await axios.get(`${BASE_URL}/movie/${id}`, options);
-    setMovieDetails(data);
+    try {
+      showLoading();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      const { data } = await axios.get(`${BASE_URL}/movie/${id}`, options);
+      setMovieDetails(data);
+    } catch (error) {
+      console.error("Error fetching movie details:", error);
+    } finally {
+      hideLoading();
+    }
   };
 
   useEffect(() => {
     fetchMovieDetails.current();
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -49,10 +59,10 @@ const MovieDetails = () => {
         </div>
       </div>
       <div className="relative mt-20 lg:mt-40">
-        <div className="md:hidden saturate-0 backdrop-opacity-70">
+        <div className="md:hidden saturate-0">
           <img
             title={movieDetails.title || movieDetails.name}
-            className="cursor-pointer bg-black/70 w-full h-full"
+            className="cursor-pointer w-full h-full"
             src={
               movieDetails.poster_path
                 ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`
@@ -61,10 +71,10 @@ const MovieDetails = () => {
             alt={movieDetails.id}
           />
         </div>
-        <div className="hidden md:flex saturate-0 backdrop-opacity-70">
+        <div className="hidden md:flex saturate-0">
           <img
             title={movieDetails.title || movieDetails.name}
-            className="cursor-pointer backdrop-grayscale-100 w-full h-full"
+            className="cursor-pointer red w-full h-full"
             src={
               movieDetails.backdrop_path
                 ? `https://image.tmdb.org/t/p/original${movieDetails.backdrop_path}`
@@ -116,39 +126,39 @@ const MovieDetails = () => {
               </div>
               <div className="flex flex-col gap-1 font-poppins mb-4 md:mb-5 lg:mb-6">
                 <h3 className="tracking-widest font-extrabold uppercase text-xs xs:text-sm lg:text-sm">
-                  Overview :
+                  Overview:
                 </h3>
-                <p className="w-full text-start text-wrap truncate line-clamp-2 text-xs tracking-wider transition-all md:line-clamp-4 lg:text-sm xl:line-clamp-6">
+                <div className="w-full text-start text-wrap truncate line-clamp-2 text-xs tracking-wider transition-all md:line-clamp-4 lg:text-sm xl:line-clamp-6">
                   {movieDetails.overview}
-                </p>
+                </div>
               </div>
               <div className="w-full flex justify-between gap-2.5">
                 <div className="w-full flex flex-col gap-2.5 tracking-widest text-xs xs:text-sm lg:text-sm truncate">
-                  <p className="flex gap-1 truncate">
-                    <p className="font-extrabold uppercase">Status :</p>
+                  <div className="flex gap-1 truncate">
+                    <div className="font-extrabold uppercase">Status:</div>
                     {movieDetails.status}
-                  </p>
-                  <p className="flex gap-1 truncate">
-                    <p className="font-extrabold uppercase">Duration :</p>
+                  </div>
+                  <div className="flex gap-1 truncate">
+                    <div className="font-extrabold uppercase">Duration:</div>
                     {movieDetails.runtime} mins
-                  </p>
-                  <p className="flex gap-1 truncate">
-                    <p className="font-extrabold uppercase">Language :</p>
+                  </div>
+                  <div className="flex gap-1 truncate">
+                    <div className="font-extrabold uppercase">Language:</div>
                     {movieDetails.spoken_languages?.[0]?.english_name ||
                       movieDetails.original_language}
-                  </p>
+                  </div>
                 </div>
                 <div className="w-full flex flex-col gap-2.5 tracking-widest text-xs xs:text-sm lg:text-sm truncate">
-                  <p className="flex gap-1 truncate">
-                    <p className="font-extrabold uppercase">Released :</p>
+                  <div className="flex gap-1 truncate">
+                    <div className="font-extrabold uppercase">Released:</div>
                     {dayjs(movieDetails.release_date).format("YYYY")}
-                  </p>
-                  <p className="flex items-center gap-1">
-                    <p className="font-extrabold uppercase">Ratings :</p>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="font-extrabold uppercase">Ratings:</div>
                     <Rating
                       rating={Number(movieDetails.vote_average).toFixed(1)}
                     />
-                  </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -160,7 +170,7 @@ const MovieDetails = () => {
           <h1 className="font-poppins font-semibold tracking-wider text-lg border-l-4 border-[#E50914] pl-2 mx-4 md:mx-8 md:text-xl lg:mx-16 lg:text-2xl">
             RELATED MOVIES
           </h1>
-          <SimilarMovie id={id} />
+          <SimilarMovie />
         </div>
         <div className="flex flex-col gap-5 lg:gap-10">
           <h1 className="font-poppins font-semibold tracking-wider text-lg border-l-4 border-[#E50914] pl-2 mx-4 md:mx-8 md:text-xl lg:mx-16 lg:text-2xl">
