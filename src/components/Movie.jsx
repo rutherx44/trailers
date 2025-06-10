@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
@@ -180,8 +180,9 @@ export const LatestMovie = () => {
   );
 };
 
-export const SimilarMovie = ({ id }) => {
+export const SimilarMovie = () => {
   const [similarMovie, setSimilarMovie] = useState([]);
+  const { id } = useParams();
 
   const BASE_URL = "https://api.themoviedb.org/3";
   const VITE_AUTH_KEY = import.meta.env.VITE_AUTH_KEY;
@@ -229,7 +230,7 @@ export const SimilarMovie = ({ id }) => {
 
   useEffect(() => {
     fetchSimilarMovie.current();
-  }, []);
+  }, [id]);
 
   return (
     <>

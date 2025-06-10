@@ -53,6 +53,9 @@ const Navbar = () => {
         </div>
         <ul className="hidden font-poppins text-lg items-center gap-3.5 tracking-wider transition-all lg:flex">
           <li className="hover:text-[#E50914] transition-all cursor-pointer">
+            <a href="/">Home</a>
+          </li>
+          <li className="hover:text-[#E50914] transition-all cursor-pointer">
             <a href="#browse">Browse</a>
           </li>
           <li className="hover:text-[#E50914] transition-all cursor-pointer">
@@ -92,6 +95,11 @@ const Navbar = () => {
         >
           <ChevronRight className="hover:text-[#E50914] transition-all w-6 h-6 md:w-8 md:h-8" />
         </button>
+        <li className="hover:text-[#E50914] transition-all cursor-pointer">
+          <a href="/" onClick={closeMenu}>
+            Home
+          </a>
+        </li>
         <li className="hover:text-[#E50914] transition-all cursor-pointer">
           <a href="#browse" onClick={closeMenu}>
             Browse
