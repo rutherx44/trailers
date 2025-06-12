@@ -3,14 +3,24 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { SimilarMovie } from "../components/Movie";
-import { LatestTv } from "../components/Tv";
+import { SimilarTv } from "../components/Tv";
 import { Rating } from "../components/Rating";
-import { Dot } from "lucide-react";
+import { ChevronDown, Dot } from "lucide-react";
 import Genres from "../components/Genre";
+import { useLoading } from "../contexts/LoadingContext";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import { EpisodeCard } from "../components/Card";
 
 const TvDetails = () => {
   const [tvDetails, setTvDetails] = useState({});
+  const [selectedSeason, setSelectedSeason] = useState(null);
+  const [selectedEpisode, setSelectedEpisode] = useState(null);
   const { id } = useParams();
+  const { showLoading, hideLoading } = useLoading();
 
   const BASE_URL = "https://api.themoviedb.org/3";
   const VITE_AUTH_KEY = import.meta.env.VITE_AUTH_KEY;
@@ -25,13 +35,55 @@ const TvDetails = () => {
   };
 
   fetchTvDetails.current = async () => {
-    const { data } = await axios.get(`${BASE_URL}/tv/${id}`, options);
-    setTvDetails(data);
+    try {
+      showLoading();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      setTimeout(async () => {
+        const { data } = await axios.get(`${BASE_URL}/tv/${id}`, options);
+        setTvDetails(data);
+        hideLoading();
+      }, 1500);
+    } catch (error) {
+      console.error("Error fetching movie details:", error);
+      hideLoading();
+    }
+  };
+
+  const fetchSeasonDetails = async (seasonNumber) => {
+    try {
+      const { data } = await axios.get(
+        `${BASE_URL}/tv/${id}/season/${seasonNumber}`,
+        options
+      );
+      setSelectedSeason(data);
+
+      if (data.episodes?.length > 0) {
+        setSelectedEpisode(data.episodes[0]);
+      } else {
+        setSelectedEpisode(null);
+      }
+    } catch (error) {
+      console.error("Error fetching season details:", error);
+    }
   };
 
   useEffect(() => {
     fetchTvDetails.current();
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    if (tvDetails.seasons?.length > 0) {
+      fetchSeasonDetails(tvDetails.seasons[0].season_number);
+    }
+  }, [tvDetails]);
+
+  const handleEpisodeClick = (episode) => {
+    setSelectedEpisode(episode);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <>
@@ -40,19 +92,78 @@ const TvDetails = () => {
           <p className="text-[#adadad] text-center tracking-widest font-bold text-xs">
             If current server doesn't work please try other servers below.
           </p>
-          <iframe
-            className="w-full aspect-video"
-            src={`https://multiembed.mov/?video_id=${id}&tmdb=1`}
-            allowFullScreen={true}
-            title="Video Container"
-          ></iframe>
+          {selectedSeason && selectedEpisode && (
+            <iframe
+              className="w-full aspect-video"
+              src={`https://multiembed.mov/?video_id=${id}&tmdb=1&s=${selectedSeason.season_number}&e=${selectedEpisode.episode_number}`}
+              allowFullScreen={true}
+              title="Video Container"
+            ></iframe>
+          )}
+        </div>
+        <div className="mt-20 flex items-center justify-between border-l-4 border-[#E50914] pl-2 mx-4 md:mx-8 md:text-xl lg:mx-16 lg:text-2xl">
+          <div className="uppercase font-poppins font-semibold tracking-wider text-lg md:text-xl lg:text-2xl">
+            {selectedSeason?.name}
+          </div>
+          <div className="dropdown dropdown-end transition-none">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn bg-transparent border-none outline-none shadow-none p-0 h-fit"
+            >
+              <ChevronDown className="w-6 h-6 md:w-8 md:h-8" />
+            </div>
+            <ul
+              tabIndex={0}
+              className="dropdown-content flex flex-col items-end h-40 font-poppins gap-2 py-2.5 px-2.5 bg-transparent rounded-md z-1 backdrop-blur-xl overflow-auto"
+            >
+              {tvDetails.seasons?.map((season) => (
+                <li
+                  key={season.id}
+                  className={`cursor-pointer w-max text-[#adadad] px-2 py-1 transition-all rounded ${
+                    selectedSeason?.id === season.id
+                      ? "bg-[#E50914] text-white"
+                      : "hover:bg-[#4D0407] hover:text-white"
+                  }`}
+                  onClick={() => fetchSeasonDetails(season.season_number)}
+                >
+                  {season.name}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="mt-5 lg:mt-10">
+          <div>
+            <Swiper
+              modules={[Navigation]}
+              slidesPerView={"auto"}
+              spaceBetween={10}
+              navigation
+              className="swiper-carousel"
+            >
+              {selectedSeason?.episodes?.map((episode) => (
+                <SwiperSlide
+                  key={episode.id}
+                  className="w-fit! pl-2.5 md:pl-3 lg:pl-3.5 xl:pl-4 cursor-pointer"
+                  onClick={() => handleEpisodeClick(episode)}
+                >
+                  <EpisodeCard
+                    episode={episode}
+                    seasonName={selectedSeason.name}
+                    isPlaying={selectedEpisode?.id === episode.id}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
         </div>
       </div>
-      <div className="relative mt-20 lg:mt-40">
+      <div className="relative mt-20">
         <div className="md:hidden saturate-0 backdrop-opacity-70">
           <img
             title={tvDetails.title || tvDetails.name}
-            className="cursor-pointer bg-black/70 w-full h-full"
+            className="cursor-pointer bg-black/70 w-full"
             src={
               tvDetails.poster_path
                 ? `https://image.tmdb.org/t/p/w500${tvDetails.poster_path}`
@@ -64,7 +175,7 @@ const TvDetails = () => {
         <div className="hidden md:flex saturate-0 backdrop-opacity-70">
           <img
             title={tvDetails.title || tvDetails.name}
-            className="cursor-pointer backdrop-grayscale-100 w-full h-full"
+            className="cursor-pointer backdrop-grayscale-100 w-full"
             src={
               tvDetails.backdrop_path
                 ? `https://image.tmdb.org/t/p/original${tvDetails.backdrop_path}`
@@ -155,21 +266,23 @@ const TvDetails = () => {
           </div>
         </div>
       </div>
-      <section className="mt-20 flex flex-col gap-10 lg:gap-20">
+      <section>
         <div className="flex flex-col gap-5 lg:gap-10">
           <h1 className="font-poppins font-semibold tracking-wider text-lg border-l-4 border-[#E50914] pl-2 mx-4 md:mx-8 md:text-xl lg:mx-16 lg:text-2xl">
             RELATED TV SHOWS
           </h1>
-          <LatestTv id={id} />
-        </div>
-        <div className="flex flex-col gap-5 lg:gap-10">
-          <h1 className="font-poppins font-semibold tracking-wider text-lg border-l-4 border-[#E50914] pl-2 mx-4 md:mx-8 md:text-xl lg:mx-16 lg:text-2xl">
-            RELATED MOVIES
-          </h1>
-          <SimilarMovie id={id} />
+          <SimilarTv />
         </div>
       </section>
-      <section className="mt-20 lg:mt-40 flex flex-col gap-10 lg:gap-20">
+      <section className="mt-20">
+        <div className="flex flex-col gap-5 lg:gap-10">
+          <h1 className="font-poppins font-semibold tracking-wider text-lg border-l-4 border-[#E50914] pl-2 mx-4 md:mx-8 md:text-xl lg:mx-16 lg:text-2xl">
+            RELATED TV SHOWS
+          </h1>
+          <SimilarTv />
+        </div>
+      </section>
+      <section className="mt-20">
         <div className="flex flex-col gap-5 lg:gap-10">
           <h1 className="font-poppins font-semibold tracking-wider text-lg border-l-4 border-[#E50914] pl-2 mx-4 md:mx-8 md:text-xl lg:mx-16 lg:text-2xl">
             BROWSE BY GENRE

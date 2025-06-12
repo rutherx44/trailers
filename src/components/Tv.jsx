@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useContext } from "react";
+import { GenreContext } from "../contexts/GenreContext";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
@@ -12,6 +14,7 @@ import { TopMovieCard, MovieCard } from "./Card";
 
 export const Tv = () => {
   const [shows, setShows] = useState([]);
+  const genres = useContext(GenreContext);
 
   const BASE_URL = "https://api.themoviedb.org/3";
   const VITE_AUTH_KEY = import.meta.env.VITE_AUTH_KEY;
@@ -29,53 +32,68 @@ export const Tv = () => {
   };
 
   fetchTrendingTv.current = async () => {
-    const {
-      data: { results },
-    } = await axios.get(`${BASE_URL}/trending/tv/day`, options);
+    try {
+      const {
+        data: { results },
+      } = await axios.get(`${BASE_URL}/trending/tv/day`, options);
 
-    // Fetch genres and English backdrops for each movie
-    const showsDetailsPromises = results.map(async (item) => {
-      const [detailsResponse, imagesResponse] = await Promise.all([
-        axios.get(`${BASE_URL}/tv/${item.id}`, options),
-        axios.get(`${BASE_URL}/tv/${item.id}/images?`, options),
-      ]);
+      const showsDetailsPromises = results.map(async (item) => {
+        try {
+          const imagesResponse = await axios.get(
+            `${BASE_URL}/tv/${item.id}/images`,
+            options
+          );
+          const englishBackdrops = imagesResponse.data.backdrops || [];
+          const firstBackdrop =
+            englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
 
-      const englishBackdrops = imagesResponse.data.backdrops || [];
-      const firstBackdrop =
-        englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
+          const movieGenres = item.genre_ids
+            .map((id) => genres.find((g) => g.id === id))
+            .filter(Boolean);
 
-      return {
-        ...item,
-        genres: detailsResponse.data.genres || [],
-        englishBackdrop: firstBackdrop
-          ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
-          : item.backdrop_path,
-      };
-    });
+          const { data: tvDetails } = await axios.get(
+            `${BASE_URL}/tv/${item.id}`,
+            options
+          );
 
-    const showsWithDetails = await Promise.all(showsDetailsPromises);
-    setShows(showsWithDetails);
+          return {
+            ...item,
+            genres: movieGenres,
+            englishBackdrop: firstBackdrop
+              ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
+              : item.backdrop_path,
+            seasons: tvDetails.seasons || [],
+          };
+        } catch (innerError) {
+          console.error(
+            `Error fetching details for show ${item.id}:`,
+            innerError
+          );
+        }
+      });
+
+      const showsWithDetails = await Promise.all(showsDetailsPromises);
+      setShows(showsWithDetails.filter(Boolean));
+    } catch (error) {
+      console.error("Error fetching similar TV shows:", error);
+    }
   };
 
   useEffect(() => {
-    fetchTrendingTv.current();
-  }, []);
+    if (genres.length > 0) {
+      fetchTrendingTv.current();
+    }
+  }, [genres]);
 
   return (
     <>
       <div>
         <Swiper
           modules={[Navigation, Pagination]}
-          slidesPerView={2}
+          slidesPerView={"auto"}
           spaceBetween={10}
           loop={true}
           pagination={true}
-          breakpoints={{
-            520: { slidesPerView: 4 },
-            768: { slidesPerView: 5, spaceBetween: 12 },
-            1024: { slidesPerView: 6, spaceBetween: 14 },
-            1280: { slidesPerView: 7, spaceBetween: 16 },
-          }}
           navigation
           className="swiper-carousel"
         >
@@ -84,7 +102,9 @@ export const Tv = () => {
               key={idx}
               className="w-fit! pl-2.5 md:pl-3 lg:pl-3.5 xl:pl-4 cursor-pointer"
             >
-              <Link to={`/tv/${shows.id}`}>
+              <Link
+                to={`/tv/${shows.id}/season/${shows.seasons[0].season_number}}`}
+              >
                 <TopMovieCard data={shows} num={idx} />
               </Link>
             </SwiperSlide>
@@ -97,6 +117,7 @@ export const Tv = () => {
 
 export const LatestTv = () => {
   const [latestShows, setLatestShows] = useState([]);
+  const genres = useContext(GenreContext);
 
   const BASE_URL = "https://api.themoviedb.org/3";
   const VITE_AUTH_KEY = import.meta.env.VITE_AUTH_KEY;
@@ -114,53 +135,68 @@ export const LatestTv = () => {
   };
 
   fetchLatestTv.current = async () => {
-    const {
-      data: { results },
-    } = await axios.get(`${BASE_URL}/tv/popular`, options);
+    try {
+      const {
+        data: { results },
+      } = await axios.get(`${BASE_URL}/tv/popular`, options);
 
-    // Fetch genres and English backdrops for each movie
-    const showsDetailsPromises = results.map(async (item) => {
-      const [detailsResponse, imagesResponse] = await Promise.all([
-        axios.get(`${BASE_URL}/tv/${item.id}`, options),
-        axios.get(`${BASE_URL}/tv/${item.id}/images?`, options),
-      ]);
+      const showsDetailsPromises = results.map(async (item) => {
+        try {
+          const imagesResponse = await axios.get(
+            `${BASE_URL}/tv/${item.id}/images`,
+            options
+          );
+          const englishBackdrops = imagesResponse.data.backdrops || [];
+          const firstBackdrop =
+            englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
 
-      const englishBackdrops = imagesResponse.data.backdrops || [];
-      const firstBackdrop =
-        englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
+          const movieGenres = item.genre_ids
+            .map((id) => genres.find((g) => g.id === id))
+            .filter(Boolean);
 
-      return {
-        ...item,
-        genres: detailsResponse.data.genres || [],
-        englishBackdrop: firstBackdrop
-          ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
-          : item.backdrop_path,
-      };
-    });
+          const { data: tvDetails } = await axios.get(
+            `${BASE_URL}/tv/${item.id}`,
+            options
+          );
 
-    const showsWithDetails = await Promise.all(showsDetailsPromises);
-    setLatestShows(showsWithDetails);
+          return {
+            ...item,
+            genres: movieGenres,
+            englishBackdrop: firstBackdrop
+              ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
+              : item.backdrop_path,
+            seasons: tvDetails.seasons || [],
+          };
+        } catch (innerError) {
+          console.error(
+            `Error fetching details for show ${item.id}:`,
+            innerError
+          );
+        }
+      });
+
+      const showsWithDetails = await Promise.all(showsDetailsPromises);
+      setLatestShows(showsWithDetails.filter(Boolean));
+    } catch (error) {
+      console.error("Error fetching similar TV shows:", error);
+    }
   };
 
   useEffect(() => {
-    fetchLatestTv.current();
-  }, []);
+    if (genres.length > 0) {
+      fetchLatestTv.current();
+    }
+  }, [genres]);
 
   return (
     <>
       <div>
         <Swiper
           modules={[Navigation, Pagination]}
-          slidesPerView={2}
+          slidesPerView={"auto"}
           spaceBetween={10}
           loop={true}
           pagination={true}
-          breakpoints={{
-            520: { slidesPerView: 4 },
-            768: { slidesPerView: 5, spaceBetween: 12 },
-            1024: { slidesPerView: 6, spaceBetween: 14 },
-            1280: { slidesPerView: 7, spaceBetween: 16 },
-          }}
           navigation
           className="swiper-carousel"
         >
@@ -169,7 +205,9 @@ export const LatestTv = () => {
               key={idx}
               className="w-fit! pl-2.5 md:pl-3 lg:pl-3.5 xl:pl-4 cursor-pointer"
             >
-              <Link to={`/tv/${shows.id}`}>
+              <Link
+                to={`/tv/${shows.id}/season/${shows.seasons[0].season_number}}`}
+              >
                 <MovieCard data={shows} />
               </Link>
             </SwiperSlide>
@@ -180,8 +218,10 @@ export const LatestTv = () => {
   );
 };
 
-export const SimilarTv = ({ id }) => {
+export const SimilarTv = () => {
   const [similarShows, setSimilarShows] = useState([]);
+  const { id } = useParams();
+  const genres = useContext(GenreContext);
 
   const BASE_URL = "https://api.themoviedb.org/3";
   const VITE_AUTH_KEY = import.meta.env.VITE_AUTH_KEY;
@@ -199,53 +239,68 @@ export const SimilarTv = ({ id }) => {
   };
 
   fetchSimilarShows.current = async () => {
-    const {
-      data: { results },
-    } = await axios.get(`${BASE_URL}/tv/${id}/similar?`, options);
+    try {
+      const {
+        data: { results },
+      } = await axios.get(`${BASE_URL}/tv/${id}/similar?`, options);
 
-    // Fetch genres and English backdrops for each movie
-    const showsDetailsPromises = results.map(async (item) => {
-      const [detailsResponse, imagesResponse] = await Promise.all([
-        axios.get(`${BASE_URL}/tv/${item.id}`, options),
-        axios.get(`${BASE_URL}/tv/${item.id}/images?`, options),
-      ]);
+      const showsDetailsPromises = results.map(async (item) => {
+        try {
+          const imagesResponse = await axios.get(
+            `${BASE_URL}/tv/${item.id}/images`,
+            options
+          );
+          const englishBackdrops = imagesResponse.data.backdrops || [];
+          const firstBackdrop =
+            englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
 
-      const englishBackdrops = imagesResponse.data.backdrops || [];
-      const firstBackdrop =
-        englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
+          const movieGenres = item.genre_ids
+            .map((id) => genres.find((g) => g.id === id))
+            .filter(Boolean);
 
-      return {
-        ...item,
-        genres: detailsResponse.data.genres || [],
-        englishBackdrop: firstBackdrop
-          ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
-          : item.backdrop_path,
-      };
-    });
+          const { data: tvDetails } = await axios.get(
+            `${BASE_URL}/tv/${item.id}`,
+            options
+          );
 
-    const showsWithDetails = await Promise.all(showsDetailsPromises);
-    setSimilarShows(showsWithDetails);
+          return {
+            ...item,
+            genres: movieGenres,
+            englishBackdrop: firstBackdrop
+              ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
+              : item.backdrop_path,
+            seasons: tvDetails.seasons || [],
+          };
+        } catch (innerError) {
+          console.error(
+            `Error fetching details for show ${item.id}:`,
+            innerError
+          );
+        }
+      });
+
+      const showsWithDetails = await Promise.all(showsDetailsPromises);
+      setSimilarShows(showsWithDetails.filter(Boolean));
+    } catch (error) {
+      console.error("Error fetching similar TV shows:", error);
+    }
   };
 
   useEffect(() => {
-    fetchSimilarShows.current();
-  }, []);
+    if (genres.length > 0) {
+      fetchSimilarShows.current();
+    }
+  }, [id, genres]);
 
   return (
     <>
       <div>
         <Swiper
           modules={[Navigation, Pagination]}
-          slidesPerView={2}
+          slidesPerView={"auto"}
           spaceBetween={10}
           loop={true}
           pagination={true}
-          breakpoints={{
-            520: { slidesPerView: 4 },
-            768: { slidesPerView: 5, spaceBetween: 12 },
-            1024: { slidesPerView: 6, spaceBetween: 14 },
-            1280: { slidesPerView: 7, spaceBetween: 16 },
-          }}
           navigation
           className="swiper-carousel"
         >
@@ -254,7 +309,9 @@ export const SimilarTv = ({ id }) => {
               key={idx}
               className="w-fit! pl-2.5 md:pl-3 lg:pl-3.5 xl:pl-4 cursor-pointer"
             >
-              <Link to={`/tv/${shows.id}`}>
+              <Link
+                to={`/tv/${shows.id}/season/${shows.seasons[0].season_number}}`}
+              >
                 <MovieCard data={shows} />
               </Link>
             </SwiperSlide>

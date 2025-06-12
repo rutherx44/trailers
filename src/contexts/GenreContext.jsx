@@ -20,20 +20,24 @@ export const GenreProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchGenres = async () => {
-      const [movieRes, tvRes] = await Promise.all([
-        axios.get(`${BASE_URL}/genre/movie/list?`, options),
-        axios.get(`${BASE_URL}/genre/tv/list?`, options),
-      ]);
+      try {
+        const [movieRes, tvRes] = await Promise.all([
+          axios.get(`${BASE_URL}/genre/movie/list?`, options),
+          axios.get(`${BASE_URL}/genre/tv/list?`, options),
+        ]);
 
-      const movieData = movieRes.data.genres;
-      const tvData = tvRes.data.genres;
+        const movieData = movieRes.data.genres;
+        const tvData = tvRes.data.genres;
 
-      const combined = [...movieData, ...tvData];
-      const uniqueGenres = Array.from(
-        new Map(combined.map((genre) => [genre.id, genre])).values()
-      );
+        const combined = [...movieData, ...tvData];
+        const uniqueGenres = Array.from(
+          new Map(combined.map((genre) => [genre.id, genre])).values()
+        );
 
-      setGenres(uniqueGenres);
+        setGenres(uniqueGenres);
+      } catch (error) {
+        console.error("Error fetching genres:", error);
+      }
     };
 
     fetchGenres();

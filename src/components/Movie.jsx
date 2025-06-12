@@ -32,36 +32,45 @@ export const Movie = () => {
   };
 
   fetchTrendingMovie.current = async () => {
-    const {
-      data: { results },
-    } = await axios.get(`${BASE_URL}/trending/movie/day`, options);
+    try {
+      const {
+        data: { results },
+      } = await axios.get(`${BASE_URL}/trending/movie/day`, options);
 
-    // Fetch genres and English backdrops for each movie
-    const movieDetailsPromises = results.map(async (item) => {
-      const imagesResponse = await axios.get(
-        `${BASE_URL}/movie/${item.id}/images?`,
-        options
-      );
+      // Fetch genres and English backdrops for each movie
+      const movieDetailsPromises = results.map(async (item) => {
+        try {
+          const imagesResponse = await axios.get(
+            `${BASE_URL}/movie/${item.id}/images?`,
+            options
+          );
 
-      const englishBackdrops = imagesResponse.data.backdrops || [];
-      const firstBackdrop =
-        englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
+          const englishBackdrops = imagesResponse.data.backdrops || [];
+          const firstBackdrop =
+            englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
 
-      const movieGenres = item.genre_ids
-        .map((id) => genres.find((g) => g.id === id))
-        .filter(Boolean);
+          const movieGenres = item.genre_ids
+            .map((id) => genres.find((g) => g.id === id))
+            .filter(Boolean);
 
-      return {
-        ...item,
-        genres: movieGenres,
-        englishBackdrop: firstBackdrop
-          ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
-          : item.backdrop_path,
-      };
-    });
+          return {
+            ...item,
+            genres: movieGenres,
+            englishBackdrop: firstBackdrop
+              ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
+              : item.backdrop_path,
+          };
+        } catch (error) {
+          console.error("Error fetching movie images:", error);
+          return { ...item, genres: [], englishBackdrop: item.backdrop_path };
+        }
+      });
 
-    const moviesWithDetails = await Promise.all(movieDetailsPromises);
-    setMovies(moviesWithDetails);
+      const moviesWithDetails = await Promise.all(movieDetailsPromises);
+      setMovies(moviesWithDetails);
+    } catch (error) {
+      console.error("Error fetching trending movies:", error);
+    }
   };
 
   useEffect(() => {
@@ -75,16 +84,10 @@ export const Movie = () => {
       <div>
         <Swiper
           modules={[Navigation, Pagination]}
-          slidesPerView={2}
+          slidesPerView={"auto"}
           spaceBetween={10}
           loop={true}
           pagination={true}
-          breakpoints={{
-            520: { slidesPerView: 4 },
-            768: { slidesPerView: 5, spaceBetween: 12 },
-            1024: { slidesPerView: 6, spaceBetween: 14 },
-            1280: { slidesPerView: 7, spaceBetween: 16 },
-          }}
           navigation
           className="swiper-carousel"
         >
@@ -124,36 +127,45 @@ export const LatestMovie = () => {
   };
 
   fetchLatestMovie.current = async () => {
-    const {
-      data: { results },
-    } = await axios.get(`${BASE_URL}/movie/popular`, options);
+    try {
+      const {
+        data: { results },
+      } = await axios.get(`${BASE_URL}/movie/popular`, options);
 
-    // Fetch genres and English backdrops for each movie
-    const movieDetailsPromises = results.map(async (item) => {
-      const imagesResponse = await axios.get(
-        `${BASE_URL}/movie/${item.id}/images?`,
-        options
-      );
+      // Fetch genres and English backdrops for each movie
+      const movieDetailsPromises = results.map(async (item) => {
+        try {
+          const imagesResponse = await axios.get(
+            `${BASE_URL}/movie/${item.id}/images?`,
+            options
+          );
 
-      const englishBackdrops = imagesResponse.data.backdrops || [];
-      const firstBackdrop =
-        englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
+          const englishBackdrops = imagesResponse.data.backdrops || [];
+          const firstBackdrop =
+            englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
 
-      const movieGenres = item.genre_ids
-        .map((id) => genres.find((g) => g.id === id))
-        .filter(Boolean);
+          const movieGenres = item.genre_ids
+            .map((id) => genres.find((g) => g.id === id))
+            .filter(Boolean);
 
-      return {
-        ...item,
-        genres: movieGenres,
-        englishBackdrop: firstBackdrop
-          ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
-          : item.backdrop_path,
-      };
-    });
+          return {
+            ...item,
+            genres: movieGenres,
+            englishBackdrop: firstBackdrop
+              ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
+              : item.backdrop_path,
+          };
+        } catch (error) {
+          console.error("Error fetching movie images:", error);
+          return { ...item, genres: [], englishBackdrop: item.backdrop_path };
+        }
+      });
 
-    const moviesWithDetails = await Promise.all(movieDetailsPromises);
-    setLatestMovie(moviesWithDetails);
+      const moviesWithDetails = await Promise.all(movieDetailsPromises);
+      setLatestMovie(moviesWithDetails);
+    } catch (error) {
+      console.error("Error fetching trending movies:", error);
+    }
   };
 
   useEffect(() => {
@@ -167,16 +179,10 @@ export const LatestMovie = () => {
       <div>
         <Swiper
           modules={[Navigation, Pagination]}
-          slidesPerView={2}
+          slidesPerView={"auto"}
           spaceBetween={10}
           loop={true}
           pagination={true}
-          breakpoints={{
-            520: { slidesPerView: 4 },
-            768: { slidesPerView: 5, spaceBetween: 12 },
-            1024: { slidesPerView: 6, spaceBetween: 14 },
-            1280: { slidesPerView: 7, spaceBetween: 16 },
-          }}
           navigation
           className="swiper-carousel"
         >
@@ -217,36 +223,45 @@ export const SimilarMovie = () => {
   };
 
   fetchSimilarMovie.current = async () => {
-    const {
-      data: { results },
-    } = await axios.get(`${BASE_URL}/movie/${id}/similar?`, options);
+    try {
+      const {
+        data: { results },
+      } = await axios.get(`${BASE_URL}/movie/${id}/similar?`, options);
 
-    // Fetch genres and English backdrops for each movie
-    const movieDetailsPromises = results.map(async (item) => {
-      const imagesResponse = await axios.get(
-        `${BASE_URL}/movie/${item.id}/images?`,
-        options
-      );
+      // Fetch genres and English backdrops for each movie
+      const movieDetailsPromises = results.map(async (item) => {
+        try {
+          const imagesResponse = await axios.get(
+            `${BASE_URL}/movie/${item.id}/images?`,
+            options
+          );
 
-      const englishBackdrops = imagesResponse.data.backdrops || [];
-      const firstBackdrop =
-        englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
+          const englishBackdrops = imagesResponse.data.backdrops || [];
+          const firstBackdrop =
+            englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
 
-      const movieGenres = item.genre_ids
-        .map((id) => genres.find((g) => g.id === id))
-        .filter(Boolean);
+          const movieGenres = item.genre_ids
+            .map((id) => genres.find((g) => g.id === id))
+            .filter(Boolean);
 
-      return {
-        ...item,
-        genres: movieGenres,
-        englishBackdrop: firstBackdrop
-          ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
-          : item.backdrop_path,
-      };
-    });
+          return {
+            ...item,
+            genres: movieGenres,
+            englishBackdrop: firstBackdrop
+              ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
+              : item.backdrop_path,
+          };
+        } catch (error) {
+          console.error("Error fetching movie images:", error);
+          return { ...item, genres: [], englishBackdrop: item.backdrop_path };
+        }
+      });
 
-    const moviesWithDetails = await Promise.all(movieDetailsPromises);
-    setSimilarMovie(moviesWithDetails);
+      const moviesWithDetails = await Promise.all(movieDetailsPromises);
+      setSimilarMovie(moviesWithDetails);
+    } catch (error) {
+      console.error("Error fetching trending movies:", error);
+    }
   };
 
   useEffect(() => {
@@ -260,16 +275,10 @@ export const SimilarMovie = () => {
       <div>
         <Swiper
           modules={[Navigation, Pagination]}
-          slidesPerView={2}
+          slidesPerView={"auto"}
           spaceBetween={10}
           loop={true}
           pagination={true}
-          breakpoints={{
-            520: { slidesPerView: 4 },
-            768: { slidesPerView: 5, spaceBetween: 12 },
-            1024: { slidesPerView: 6, spaceBetween: 14 },
-            1280: { slidesPerView: 7, spaceBetween: 16 },
-          }}
           navigation
           className="swiper-carousel"
         >

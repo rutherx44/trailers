@@ -27,24 +27,31 @@ const Trailer = () => {
   };
 
   fetchVideo.current = async () => {
-    const {
-      data: { results: nowPlaying },
-    } = await axios.get(
-      `${BASE_URL}/movie/now_playing?language=en-US&page=1`,
-      options
-    );
+    try {
+      const {
+        data: { results: nowPlaying },
+      } = await axios.get(
+        `${BASE_URL}/movie/now_playing?language=en-US&page=1`,
+        options
+      );
 
-    if (nowPlaying.length === 0) return;
+      if (nowPlaying.length === 0) return;
 
-    const randomMovie =
-      nowPlaying[Math.floor(Math.random() * nowPlaying.length)];
+      const randomMovie =
+        nowPlaying[Math.floor(Math.random() * nowPlaying.length)];
 
-    const {
-      data: { results: videoResults },
-    } = await axios.get(`${BASE_URL}/movie/${randomMovie.id}/videos`, options);
+      const {
+        data: { results: videoResults },
+      } = await axios.get(
+        `${BASE_URL}/movie/${randomMovie.id}/videos`,
+        options
+      );
 
-    setMovies([randomMovie]);
-    setVideos(videoResults);
+      setMovies([randomMovie]);
+      setVideos(videoResults);
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
   };
 
   useEffect(() => {
