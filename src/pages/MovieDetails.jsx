@@ -30,11 +30,13 @@ const MovieDetails = () => {
     try {
       showLoading();
       window.scrollTo({ top: 0, behavior: "smooth" });
-      const { data } = await axios.get(`${BASE_URL}/movie/${id}`, options);
-      setMovieDetails(data);
+      setTimeout(async () => {
+        const { data } = await axios.get(`${BASE_URL}/movie/${id}`, options);
+        setMovieDetails(data);
+        hideLoading();
+      }, 1000);
     } catch (error) {
       console.error("Error fetching movie details:", error);
-    } finally {
       hideLoading();
     }
   };

@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { useContext } from "react";
+import { GenreContext } from "../contexts/GenreContext";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -10,6 +12,7 @@ import { HeroCard } from "./Card";
 
 const Hero = () => {
   const [moviesBackdrop, setMoviesBackdrop] = useState([]);
+  const genres = useContext(GenreContext);
 
   const BASE_URL = "https://api.themoviedb.org/3";
   const VITE_AUTH_KEY = import.meta.env.VITE_AUTH_KEY;
@@ -26,37 +29,34 @@ const Hero = () => {
     },
   };
   fetchMoviesBackdrop.current = async () => {
-    const {
-      data: { results },
-    } = await axios.get(`${BASE_URL}/trending/all/day`, options);
+    try {
+      const {
+        data: { results },
+      } = await axios.get(`${BASE_URL}/trending/all/day`, options);
 
-    // Fetch genres and English backdrops
-    const movieDataPromises = results.map(async (item) => {
-      const type = item.media_type; // 'movie' or 'tv'
+      const movieDataPromises = results.map(async (item) => {
+        const movieGenres = item.genre_ids
+          .map((id) => genres.find((g) => g.id === id))
+          .filter(Boolean);
 
-      const [{ data: details }, { data: images }] = await Promise.all([
-        axios.get(`${BASE_URL}/${type}/${item.id}`, options),
-        axios.get(`${BASE_URL}/${type}/${item.id}/images`, options),
-      ]);
+        return {
+          ...item,
+          genres: movieGenres,
+        };
+      });
 
-      const englishBackdrop = images.backdrops?.find(
-        (img) => img.iso_639_1 === "en"
-      );
-
-      return {
-        ...item,
-        genres: details.genres || [],
-        backdrop_path: englishBackdrop?.file_path || item.backdrop_path,
-      };
-    });
-
-    const heroWithData = await Promise.all(movieDataPromises);
-    setMoviesBackdrop(heroWithData);
+      const heroWithData = await Promise.all(movieDataPromises);
+      setMoviesBackdrop(heroWithData);
+    } catch (error) {
+      console.error("Failed fetching trending movies:", error);
+    }
   };
 
   useEffect(() => {
-    fetchMoviesBackdrop.current();
-  }, []);
+    if (genres.length > 0) {
+      fetchMoviesBackdrop.current();
+    }
+  }, [genres]);
 
   return (
     <>

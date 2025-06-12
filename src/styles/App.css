@@ -1,14 +1,15 @@
 
 
 
-html {
-  scroll-behavior: smooth;
-}
 
-body {
+:root, body {
   background-color: #180102;
   font-size: 1rem;
   color: #ffffff; 
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 .red {
@@ -37,7 +38,7 @@ body {
   stroke: transparent !important;
 }
 
-/*? Loading */
+/*! Loading */
 .loading-overlay {
   position: fixed;
   top: 0;
@@ -70,7 +71,7 @@ body {
   }
 }
 
-/*? Swiper */
+/*! Swiper */
 .swiper-button-next {
   justify-content: right !important;
   padding-right: 1rem;
@@ -140,7 +141,7 @@ body {
   padding-right: 1rem;
 }
 
-/* Custom Scrollbars Style */
+/*! Scrollbars */
 /* width */
 ::-webkit-scrollbar {
   width: 0.5rem;

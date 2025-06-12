@@ -3,8 +3,12 @@ import { Rating } from "./Rating";
 import { Dot, Info, Play } from "lucide-react";
 import Button from "./Button";
 import dayjs from "dayjs";
+import { Link } from "react-router-dom";
 
 export const HeroCard = (props) => {
+  const isMovie = props.data.media_type === "movie";
+  const isTVShow = props.data.media_type === "tv";
+
   return (
     <>
       <div className="w-full h-full">
@@ -55,9 +59,17 @@ export const HeroCard = (props) => {
               <div className="flex flex-col gap-3">
                 <div className="flex flex-row items-center justify-center gap-3 font-poppins transition-all">
                   <Rating rating={Number(props.data.vote_average).toFixed(1)} />
-                  <a href="/">
+                  <Link
+                    to={
+                      isMovie
+                        ? `/movie/${props.data.id}`
+                        : isTVShow
+                        ? `/tv/${props.data.id}/season/1`
+                        : "#"
+                    }
+                  >
                     <Button icon={<Play />} displayText="WATCH NOW" />
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div>
@@ -138,52 +150,8 @@ export const TopMovieCard = (props) => {
               </div>
             </div>
           </div>
-          <div className="">
-            <Rating rating={Number(props.data.vote_average).toFixed(1)} />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export const TrailerCard = ({ data, videos }) => {
-  const videoKey = videos.length > 0 ? videos[0].key : null;
-  return (
-    <div className="w-full h-full flex flex-col md:w-[44rem] lg:w-[62rem] xl:w-[74rem] transition-all">
-      <div className="w-full h-full transition-all">
-        {videoKey ? (
-          <iframe
-            src={`https://www.youtube.com/embed/${videoKey}`}
-            title={videos.name}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="w-full h-[25vh] 2xs:h-[30vh] xs:h-[40vh] sm:h-[50vh] md:h-[55vh] lg:h-[70vh] xl:h-[41.625rem] rounded-md"
-          ></iframe>
-        ) : (
-          <p>No trailer available</p>
-        )}
-      </div>
-
-      <div className="w-full transition-all mt-2.5">
-        <div className="flex gap-1.5 justify-between items-center">
-          <div className="flex items-center gap-2 truncate">
-            <div className="flex flex-col text-[#adadad] truncate">
-              <p
-                title={data.title || data.name}
-                className="font-poppins font-bold tracking-widest transition-all text-sm md:text-base lg:text-lg truncate"
-              >
-                {data.title || data.name}
-              </p>
-              <p className="font-poppins font-normal tracking-widest transition-all text-sm md:text-base lg:text-lg">
-                {dayjs(data.release_date).format("YYYY")}
-              </p>
-            </div>
-          </div>
           <div>
-            <a href="/">
-              <Button icon={<Info />} displayText="MORE INFO" />
-            </a>
+            <Rating rating={Number(props.data.vote_average).toFixed(1)} />
           </div>
         </div>
       </div>
@@ -227,8 +195,54 @@ export const MovieCard = (props) => {
               </p>
             </div>
           </div>
-          <div className="">
+          <div>
             <Rating rating={Number(props.data.vote_average).toFixed(1)} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const TrailerCard = ({ data, videos }) => {
+  const videoKey = videos.length > 0 ? videos[0].key : null;
+  return (
+    <div className="w-full h-full flex flex-col md:w-[44rem] lg:w-[62rem] xl:w-[74rem] transition-all">
+      <div className="w-full h-full transition-all">
+        {videoKey ? (
+          <iframe
+            src={`https://www.youtube.com/embed/${videoKey}`}
+            title={videos.name}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="w-full h-[25vh] 2xs:h-[30vh] xs:h-[40vh] sm:h-[50vh] md:h-[55vh] lg:h-[70vh] xl:h-[41.625rem] rounded-md"
+          ></iframe>
+        ) : (
+          <p>No trailer available</p>
+        )}
+      </div>
+
+      <div className="w-full transition-all mt-2.5">
+        <div className="flex gap-1.5 justify-between items-center">
+          <div className="flex items-center gap-2 truncate">
+            <div className="flex flex-col text-[#adadad] truncate">
+              <p
+                title={data.title || data.name}
+                className="font-poppins font-bold tracking-widest transition-all text-sm md:text-base lg:text-lg truncate"
+              >
+                {data.title || data.name}
+              </p>
+              <p className="font-poppins font-normal tracking-widest transition-all text-sm md:text-base lg:text-lg">
+                {dayjs(data.release_date).format("YYYY")}
+              </p>
+            </div>
+          </div>
+          <div>
+            <Link
+              to={`/movie/${data.id}`} // Dynamically generate the URL
+            >
+              <Button icon={<Info />} displayText="MORE INFO" />
+            </Link>
           </div>
         </div>
       </div>
@@ -248,6 +262,48 @@ export const GenreCard = ({ data, gradientClass }) => {
         >
           {data.name}
         </p>
+      </div>
+    </div>
+  );
+};
+
+export const EpisodeCard = ({ episode, seasonName, isPlaying }) => {
+  return (
+    <div className="w-fit flex flex-col gap-1 lg:gap-2 cursor-pointer">
+      <div className="w-[12.4375rem] h-[7.625rem] md:w-[14.25rem] md:h-[8rem] lg:w-[15.875rem] lg:h-[9rem] rounded-md transition-all">
+        <img
+          title={episode.name}
+          className="w-full h-full rounded-md object-cover"
+          src={
+            episode.still_path
+              ? `https://image.tmdb.org/t/p/original${episode.still_path}`
+              : "/no-image-landscape.svg"
+          }
+          alt={episode.name}
+        />
+        {isPlaying && (
+          <span className="absolute top-2 right-2 bg-[#E50914] text-white border-3 border-[#4D0407] font-medium text-[0.5rem] lg:text-[0.625rem] px-2 py-1 rounded-full shadow-md uppercase tracking-widest">
+            NOW PLAYING
+          </span>
+        )}
+      </div>
+      <div className="w-[12.4375rem] md:w-[14.25rem] lg:w-[15.875rem] transition-all">
+        <div className="flex gap-1.5 justify-between items-center">
+          <div className="flex flex-col text-[#adadad] truncate">
+            <p
+              title={episode.name}
+              className="flex items-center font-bold tracking-widest transition-all text-xs lg:text-sm truncate"
+            >
+              {seasonName} <Dot /> Episode {episode.episode_number}
+            </p>
+            <p className="font-poppins font-normal tracking-widest transition-all text-xs lg:text-sm">
+              <span>{episode.name}</span>
+            </p>
+          </div>
+          <div>
+            <Rating rating={Number(episode.vote_average).toFixed(1)} />
+          </div>
+        </div>
       </div>
     </div>
   );
