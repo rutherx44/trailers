@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Landing from "./pages/Landing";
 import MovieDetails from "./pages/MovieDetails";
 import TvDetails from "./pages/TvDetails";
+import CastDetails from "./pages/CastDetails";
 import Footer from "./components/Footer";
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
           <Route path="/" element={<Landing />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
           <Route path="/tv/:id/season/:seasonNum" element={<TvDetails />} />
+          <Route path="/person/:id" element={<CastDetails />} />
         </Routes>
         <Footer />
       </Router>

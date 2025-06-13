@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
-import { SimilarMovie } from "../components/Movie";
 import { SimilarTv } from "../components/Tv";
 import { Rating } from "../components/Rating";
 import { ChevronDown, Dot } from "lucide-react";
@@ -14,6 +13,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import { EpisodeCard } from "../components/Card";
+import Cast from "../components/Cast";
 
 const TvDetails = () => {
   const [tvDetails, setTvDetails] = useState({});
@@ -94,7 +94,7 @@ const TvDetails = () => {
           </p>
           {selectedSeason && selectedEpisode && (
             <iframe
-              className="w-full aspect-video"
+              className="w-full aspect-video border border-[#320204]"
               src={`https://multiembed.mov/?video_id=${id}&tmdb=1&s=${selectedSeason.season_number}&e=${selectedEpisode.episode_number}`}
               allowFullScreen={true}
               title="Video Container"
@@ -125,7 +125,13 @@ const TvDetails = () => {
                       ? "bg-[#E50914] text-white"
                       : "hover:bg-[#4D0407] hover:text-white"
                   }`}
-                  onClick={() => fetchSeasonDetails(season.season_number)}
+                  onClick={() => {
+                    fetchSeasonDetails(season.season_number);
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth",
+                    });
+                  }}
                 >
                   {season.name}
                 </li>
@@ -190,7 +196,7 @@ const TvDetails = () => {
               <div className="flex flex-col items-center justify-center rounded-md md:w-[9.5rem] md:h-full lg:w-[12.5rem] lg:h-full xl:w-[15rem] xl:h-full">
                 <img
                   title={tvDetails.title || tvDetails.name}
-                  className="cursor-pointer w-full h-full rounded-md"
+                  className="cursor-pointer w-full h-full rounded-md border border-[#320204]"
                   src={
                     tvDetails.poster_path
                       ? `https://image.tmdb.org/t/p/w500${tvDetails.poster_path}`
@@ -266,23 +272,19 @@ const TvDetails = () => {
           </div>
         </div>
       </div>
-      <section>
+      <section className="flex flex-col gap-10 lg:gap-20">
+        <div className="flex flex-col gap-5 lg:gap-10">
+          <h1 className="font-poppins font-semibold tracking-wider text-lg border-l-4 border-[#E50914] pl-2 mx-4 md:mx-8 md:text-xl lg:mx-16 lg:text-2xl">
+            CAST
+          </h1>
+          <Cast type="tv" />
+        </div>
         <div className="flex flex-col gap-5 lg:gap-10">
           <h1 className="font-poppins font-semibold tracking-wider text-lg border-l-4 border-[#E50914] pl-2 mx-4 md:mx-8 md:text-xl lg:mx-16 lg:text-2xl">
             RELATED TV SHOWS
           </h1>
           <SimilarTv />
         </div>
-      </section>
-      <section className="mt-20">
-        <div className="flex flex-col gap-5 lg:gap-10">
-          <h1 className="font-poppins font-semibold tracking-wider text-lg border-l-4 border-[#E50914] pl-2 mx-4 md:mx-8 md:text-xl lg:mx-16 lg:text-2xl">
-            RELATED TV SHOWS
-          </h1>
-          <SimilarTv />
-        </div>
-      </section>
-      <section className="mt-20">
         <div className="flex flex-col gap-5 lg:gap-10">
           <h1 className="font-poppins font-semibold tracking-wider text-lg border-l-4 border-[#E50914] pl-2 mx-4 md:mx-8 md:text-xl lg:mx-16 lg:text-2xl">
             BROWSE BY GENRE

@@ -110,7 +110,7 @@ export const HeroCard = (props) => {
 export const TopMovieCard = (props) => {
   return (
     <div className="w-fit flex flex-col gap-1 lg:gap-2">
-      <div className="w-[12.4375rem] h-[7.625rem] md:w-[14.25rem] md:h-[8rem] lg:w-[15.875rem] lg:h-[9rem] rounded-md transition-all">
+      <div className="w-[12.4375rem] h-[7.625rem] md:w-[14.25rem] md:h-[8rem] lg:w-[15.875rem] lg:h-[9rem] rounded-md transition-all border border-[#320204]">
         <img
           title={props.data.title || props.data.name}
           className="cursor-pointer w-full h-full rounded-md"
@@ -162,7 +162,7 @@ export const TopMovieCard = (props) => {
 export const MovieCard = (props) => {
   return (
     <div className="w-fit flex flex-col gap-1 lg:gap-2">
-      <div className="w-[12.4375rem] h-[7.625rem] md:w-[14.25rem] md:h-[8rem] lg:w-[15.875rem] lg:h-[9rem] rounded-md transition-all">
+      <div className="w-[12.4375rem] h-[7.625rem] md:w-[14.25rem] md:h-[8rem] lg:w-[15.875rem] lg:h-[9rem] rounded-md transition-all border border-[#320204]">
         <img
           title={props.data.title || props.data.name}
           className="cursor-pointer w-full h-full rounded-md"
@@ -178,6 +178,17 @@ export const MovieCard = (props) => {
         <div className="flex gap-1.5 justify-between items-center">
           <div className="flex items-center gap-2 truncate">
             <div className="flex flex-col text-[#adadad] truncate">
+              {props.data.media_type && (
+                <div
+                  className={`absolute top-2 right-2 font-extrabold text-[0.5rem] lg:text-[0.625rem] px-2 py-1 rounded-full shadow-md uppercase tracking-widest ${
+                    props.data.media_type === "movie"
+                      ? "bg-blue-500 border-3 border-blue-300 text-blue-950"
+                      : "bg-green-500 border-3 border-green-300 text-green-950"
+                  }`}
+                >
+                  {props.data.media_type === "movie" ? "Movie" : "TV Show"}
+                </div>
+              )}
               <p
                 title={props.data.title || props.data.name}
                 className="font-bold tracking-widest transition-all text-xs lg:text-sm truncate"
@@ -204,6 +215,46 @@ export const MovieCard = (props) => {
   );
 };
 
+export const CastCard = (props) => {
+  const { character, roles } = props.data;
+  const characterName =
+    roles && roles.length > 0 ? roles[0].character : character;
+
+  return (
+    <div className="w-fit flex flex-col gap-1 lg:gap-2">
+      <div className="h-[12.4375rem] w-[8.3125rem] md:h-[14.25rem] md:w-[9.5rem] lg:h-[15.875rem] lg:w-[10.5625rem] rounded-md transition-all border border-[#320204]">
+        <img
+          title={props.data.original_name || props.data.name}
+          className="cursor-pointer w-fit h-full rounded-md"
+          src={
+            props.data.profile_path
+              ? `https://image.tmdb.org/t/p/original${props.data.profile_path}`
+              : "/no-image-portrait.svg"
+          }
+          alt={props.data.id}
+        />
+      </div>
+      <div className="w-[8.3125rem] md:w-[9.5rem] lg:w-[10.5625rem] transition-all">
+        <div className="flex gap-1.5 justify-between items-center">
+          <div className="flex items-center gap-2 truncate">
+            <div className="flex flex-col text-[#adadad] truncate">
+              <p
+                title={props.data.original_name || props.data.name}
+                className="font-bold tracking-widest transition-all text-xs lg:text-sm truncate"
+              >
+                {props.data.original_name || props.data.name}
+              </p>
+              <p className="flex items-center font-poppins font-normal tracking-widest transition-all text-xs lg:text-sm">
+                {characterName}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const TrailerCard = ({ data, videos }) => {
   const videoKey = videos.length > 0 ? videos[0].key : null;
   return (
@@ -215,7 +266,7 @@ export const TrailerCard = ({ data, videos }) => {
             title={videos.name}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-            className="w-full h-[25vh] 2xs:h-[30vh] xs:h-[40vh] sm:h-[50vh] md:h-[55vh] lg:h-[70vh] xl:h-[41.625rem] rounded-md"
+            className="w-full h-[25vh] 2xs:h-[30vh] xs:h-[40vh] sm:h-[50vh] md:h-[55vh] lg:h-[70vh] xl:h-[41.625rem] rounded-md border border-[#320204]"
           ></iframe>
         ) : (
           <p>No trailer available</p>
@@ -270,7 +321,7 @@ export const GenreCard = ({ data, gradientClass }) => {
 export const EpisodeCard = ({ episode, seasonName, isPlaying }) => {
   return (
     <div className="w-fit flex flex-col gap-1 lg:gap-2 cursor-pointer">
-      <div className="w-[12.4375rem] h-[7.625rem] md:w-[14.25rem] md:h-[8rem] lg:w-[15.875rem] lg:h-[9rem] rounded-md transition-all">
+      <div className="w-[12.4375rem] h-[7.625rem] md:w-[14.25rem] md:h-[8rem] lg:w-[15.875rem] lg:h-[9rem] rounded-md transition-all border border-[#320204]">
         <img
           title={episode.name}
           className="w-full h-full rounded-md object-cover"
@@ -282,7 +333,7 @@ export const EpisodeCard = ({ episode, seasonName, isPlaying }) => {
           alt={episode.name}
         />
         {isPlaying && (
-          <span className="absolute top-2 right-2 bg-[#E50914] text-white border-3 border-[#4D0407] font-medium text-[0.5rem] lg:text-[0.625rem] px-2 py-1 rounded-full shadow-md uppercase tracking-widest">
+          <span className="absolute top-2 right-2 bg-pink-500 border-3 border-pink-300 text-white font-bold text-[0.5rem] lg:text-[0.625rem] px-2 py-1 rounded-full shadow-md uppercase tracking-widest">
             NOW PLAYING
           </span>
         )}
