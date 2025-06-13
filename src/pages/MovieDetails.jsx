@@ -3,11 +3,11 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { SimilarMovie } from "../components/Movie";
-import { LatestTv } from "../components/Tv";
 import { Rating } from "../components/Rating";
 import { Dot } from "lucide-react";
 import Genres from "../components/Genre";
 import { useLoading } from "../contexts/LoadingContext";
+import Cast from "../components/Cast";
 
 const MovieDetails = () => {
   const [movieDetails, setMovieDetails] = useState({});
@@ -53,7 +53,7 @@ const MovieDetails = () => {
             If current server doesn't work please try other servers below.
           </p>
           <iframe
-            className="w-full aspect-video"
+            className="w-full aspect-video border border-[#320204]"
             src={`https://multiembed.mov/?video_id=${id}&tmdb=1`}
             allowFullScreen={true}
             title="Video Container"
@@ -91,7 +91,7 @@ const MovieDetails = () => {
               <div className="flex flex-col items-center justify-center rounded-md md:w-[9.5rem] md:h-full lg:w-[12.5rem] lg:h-full xl:w-[15rem] xl:h-full">
                 <img
                   title={movieDetails.title || movieDetails.name}
-                  className="cursor-pointer w-full h-full rounded-md"
+                  className="cursor-pointer w-full h-full rounded-md border border-[#320204]"
                   src={
                     movieDetails.poster_path
                       ? `https://image.tmdb.org/t/p/w500${movieDetails.poster_path}`
@@ -167,21 +167,19 @@ const MovieDetails = () => {
           </div>
         </div>
       </div>
-      <section className="mt-20 flex flex-col gap-10 lg:gap-20">
+      <section className="flex flex-col gap-10 lg:gap-20">
+        <div className="flex flex-col gap-5 lg:gap-10">
+          <h1 className="font-poppins font-semibold tracking-wider text-lg border-l-4 border-[#E50914] pl-2 mx-4 md:mx-8 md:text-xl lg:mx-16 lg:text-2xl">
+            CAST
+          </h1>
+          <Cast type="movie" />
+        </div>
         <div className="flex flex-col gap-5 lg:gap-10">
           <h1 className="font-poppins font-semibold tracking-wider text-lg border-l-4 border-[#E50914] pl-2 mx-4 md:mx-8 md:text-xl lg:mx-16 lg:text-2xl">
             RELATED MOVIES
           </h1>
           <SimilarMovie />
         </div>
-        <div className="flex flex-col gap-5 lg:gap-10">
-          <h1 className="font-poppins font-semibold tracking-wider text-lg border-l-4 border-[#E50914] pl-2 mx-4 md:mx-8 md:text-xl lg:mx-16 lg:text-2xl">
-            RELATED TV SHOWS
-          </h1>
-          <LatestTv />
-        </div>
-      </section>
-      <section className="mt-20 lg:mt-40 flex flex-col gap-10 lg:gap-20">
         <div className="flex flex-col gap-5 lg:gap-10">
           <h1 className="font-poppins font-semibold tracking-wider text-lg border-l-4 border-[#E50914] pl-2 mx-4 md:mx-8 md:text-xl lg:mx-16 lg:text-2xl">
             BROWSE BY GENRE
