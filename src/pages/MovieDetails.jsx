@@ -16,7 +16,7 @@ const MovieDetails = () => {
 
   const BASE_URL = "https://api.themoviedb.org/3";
   const VITE_AUTH_KEY = import.meta.env.VITE_AUTH_KEY;
-  const fetchMovieDetails = useRef(() => {});
+  const fetchMovieDetails = useRef();
 
   const options = {
     params: { language: "en-US" },
@@ -110,7 +110,7 @@ const MovieDetails = () => {
                   <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] bg-[#490D0A] rounded-full text-white tracking-widest text-[0.5rem] md:text-[0.625rem] lg:text-xs">
                     {dayjs(movieDetails.release_date).format("YYYY")}
                   </span>
-                  <Dot />
+                  <Dot color="#ffffff" />
                   {movieDetails.genres &&
                     movieDetails.genres.slice(0, 2).map((genre, idx, arr) => (
                       <span key={idx} className="flex items-center">
@@ -119,7 +119,7 @@ const MovieDetails = () => {
                         </span>
                         {idx < arr.length - 1 && (
                           <span className="text-white">
-                            <Dot />
+                            <Dot color="#ffffff" />
                           </span>
                         )}
                       </span>

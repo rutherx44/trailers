@@ -68,7 +68,10 @@ export const HeroCard = (props) => {
                         : "#"
                     }
                   >
-                    <Button icon={<Play />} displayText="WATCH NOW" />
+                    <Button
+                      icon={<Play color="#ffffff" />}
+                      displayText="WATCH NOW"
+                    />
                   </Link>
                 </div>
               </div>
@@ -77,11 +80,11 @@ export const HeroCard = (props) => {
                   <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] bg-[#490D0A] rounded-full text-white tracking-widest text-[0.5rem] md:text-[0.625rem] lg:text-xs">
                     {props.data.media_type}
                   </span>
-                  <Dot />
+                  <Dot color="#ffffff" />
                   <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] bg-[#490D0A] rounded-full text-white tracking-widest text-[0.5rem] md:text-[0.625rem] lg:text-xs">
                     {dayjs(props.data.release_date).format("YYYY")}
                   </span>
-                  <Dot />
+                  <Dot color="#ffffff" />
                   {props.data.genres.slice(0, 1).map((genre, idx, arr) => (
                     <span key={idx} className="flex items-center">
                       <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] bg-[#490D0A] rounded-full text-white tracking-widest text-[0.5rem] md:text-[0.625rem] lg:text-xs">
@@ -89,7 +92,7 @@ export const HeroCard = (props) => {
                       </span>
                       {idx < arr.length - 1 && (
                         <span className="text-white">
-                          <Dot />
+                          <Dot color="#ffffff" />
                         </span>
                       )}
                     </span>
@@ -141,7 +144,7 @@ export const TopMovieCard = (props) => {
                   <span key={idx} className="flex items-center truncate">
                     {idx < arr.length - 0 && (
                       <span className="text-white">
-                        <Dot />
+                        <Dot color="#ffffff" />
                       </span>
                     )}
                     {genre.name}
@@ -179,13 +182,7 @@ export const MovieCard = (props) => {
           <div className="flex items-center gap-2 truncate">
             <div className="flex flex-col text-[#adadad] truncate">
               {props.data.media_type && (
-                <div
-                  className={`absolute top-2 right-2 font-extrabold text-[0.5rem] lg:text-[0.625rem] px-2 py-1 rounded-full shadow-md uppercase tracking-widest ${
-                    props.data.media_type === "movie"
-                      ? "bg-blue-500 border-3 border-blue-300 text-blue-950"
-                      : "bg-green-500 border-3 border-green-300 text-green-950"
-                  }`}
-                >
+                <div className="absolute top-2 right-2 py-1 px-2.5 cursor-pointer border border-[#E50914] bg-[#490D0A] rounded-full text-white tracking-widest font-extrabold text-[0.5rem] md:text-[0.625rem] lg:text-xs">
                   {props.data.media_type === "movie" ? "Movie" : "TV Show"}
                 </div>
               )}
@@ -197,7 +194,7 @@ export const MovieCard = (props) => {
               </p>
               <p className="flex items-center font-poppins font-normal tracking-widest transition-all text-xs lg:text-sm">
                 {dayjs(props.data.release_date).format("YYYY")}
-                <Dot />
+                <Dot color="#ffffff" />
                 {props.data.genres?.slice(0, 1).map((genre, idx) => (
                   <span key={idx} className="flex items-center">
                     {genre.name}
@@ -259,14 +256,14 @@ export const TrailerCard = ({ data, videos }) => {
   const videoKey = videos.length > 0 ? videos[0].key : null;
   return (
     <div className="w-full h-full flex flex-col md:w-[44rem] lg:w-[62rem] xl:w-[74rem] transition-all">
-      <div className="w-full h-full transition-all">
+      <div className="w-full h-full aspect-video transition-all">
         {videoKey ? (
           <iframe
             src={`https://www.youtube.com/embed/${videoKey}`}
             title={videos.name}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-            className="w-full h-[25vh] 2xs:h-[30vh] xs:h-[40vh] sm:h-[50vh] md:h-[55vh] lg:h-[70vh] xl:h-[41.625rem] rounded-md border border-[#320204]"
+            className="w-full full aspect-video rounded-md border border-[#320204]"
           ></iframe>
         ) : (
           <p>No trailer available</p>
@@ -292,7 +289,7 @@ export const TrailerCard = ({ data, videos }) => {
             <Link
               to={`/movie/${data.id}`} // Dynamically generate the URL
             >
-              <Button icon={<Info />} displayText="MORE INFO" />
+              <Button icon={<Info color="#ffffff" />} displayText="MORE INFO" />
             </Link>
           </div>
         </div>
@@ -345,7 +342,8 @@ export const EpisodeCard = ({ episode, seasonName, isPlaying }) => {
               title={episode.name}
               className="flex items-center font-bold tracking-widest transition-all text-xs lg:text-sm truncate"
             >
-              {seasonName} <Dot /> Episode {episode.episode_number}
+              {seasonName} <Dot color="#ffffff" /> Episode{" "}
+              {episode.episode_number}
             </p>
             <p className="font-poppins font-normal tracking-widest transition-all text-xs lg:text-sm">
               <span>{episode.name}</span>

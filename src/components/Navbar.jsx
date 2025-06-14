@@ -1,12 +1,16 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import logo from "../assets/logo.png";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import axios from "axios";
+import SearchResults from "./SearchResults";
 
 const Navbar = () => {
   const sideContentRef = useRef();
   const searchRef = useRef();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [color, setColor] = useState("#ffffff");
+  const [results, setResults] = useState([]);
+  const [query, setQuery] = useState("");
 
   /* Side menu function */
   const openMenu = () => {
@@ -28,6 +32,64 @@ const Navbar = () => {
     setColor("#ffffff");
   };
 
+  const BASE_URL = "https://api.themoviedb.org/3";
+  const VITE_AUTH_KEY = import.meta.env.VITE_AUTH_KEY;
+  const searchMovies = useRef();
+
+  const options = {
+    params: {
+      language: "en-US",
+      include_image_language: "en",
+      query: `${query}`,
+    },
+    headers: {
+      accept: "application/json",
+      Authorization: `Bearer ${VITE_AUTH_KEY}`,
+    },
+  };
+
+  searchMovies.current = async () => {
+    try {
+      const {
+        data: { results },
+      } = await axios.get(`${BASE_URL}/search/multi`, options);
+
+      const searchDetailsPromises = results.map(async (item) => {
+        try {
+          const imagesResponse = await axios.get(
+            `${BASE_URL}/movie/${item.id}/images?`,
+            options
+          );
+
+          const englishBackdrops = imagesResponse.data.backdrops || [];
+          const firstBackdrop =
+            englishBackdrops.length > 0 ? englishBackdrops[0].file_path : null;
+
+          return {
+            ...item,
+            englishBackdrop: firstBackdrop
+              ? `https://image.tmdb.org/t/p/original${firstBackdrop}`
+              : item.backdrop_path,
+          };
+        } catch (error) {
+          console.error("Error fetching movie images:", error);
+          return { ...item, genres: [], englishBackdrop: item.backdrop_path };
+        }
+      });
+
+      const searchWithDetails = await Promise.all(searchDetailsPromises);
+      setResults(searchWithDetails);
+    } catch (error) {
+      console.error("Error fetching search", error);
+    }
+  };
+
+  useEffect(() => {
+    if (query !== "") {
+      searchMovies.current();
+    }
+  }, [query]);
+
   return (
     <nav className="relative">
       <div className="w-full flex fixed top-0 left-0 z-10 items-center justify-between bg-[#180102] h-16 px-4 md:h-20 md:px-8 lg:h-24 lg:px-16">
@@ -38,7 +100,7 @@ const Navbar = () => {
             alt="Trailers Logo"
           />
         </a>
-        <div className="hidden relative items-center w-[21.875rem] lg:flex xl:w-[31.25rem] 2xl:w-[48rem] text-[#ADADAD] focus-within:text-white transition-all duration-600">
+        <div className="hidden relative items-center w-[21.875rem] lg:flex xl:w-[31.25rem] 2xl:w-[48rem] text-[#ADADAD] focus-within:text-white transition-all">
           <Search
             title="Search"
             className="absolute ml-2.5 w-6 h-6 pointer-events-none"
@@ -48,8 +110,11 @@ const Navbar = () => {
             name="search"
             placeholder="Search"
             autoComplete="off"
+            value={query}
             className="w-full text-white placeholder-[#ADADAD] px-2.5 py-2 rounded-sm bg-[#4D0407] pl-11 border-none focus:outline-2 focus:outline-[#E50914]"
+            onChange={(e) => setQuery(e.target.value)}
           />
+          <SearchResults results={results} query={query} />
         </div>
         <ul className="hidden font-poppins text-lg items-center gap-3.5 tracking-wider transition-all lg:flex">
           <li className="hover:text-[#E50914] transition-all cursor-pointer">
@@ -78,7 +143,10 @@ const Navbar = () => {
             className="cursor-pointer"
             onClick={openMenu}
           >
-            <ChevronLeft className="hover:text-[#E50914] transition-all w-6 h-6 md:w-8 md:h-8" />
+            <ChevronLeft
+              color="#ffffff"
+              className="hover:text-[#E50914] transition-all w-6 h-6 md:w-8 md:h-8"
+            />
           </button>
         </div>
       </div>
@@ -93,7 +161,10 @@ const Navbar = () => {
           className="lg:hidden cursor-pointer absolute top-5 left-4 md:top-6 md:left-8"
           onClick={closeMenu}
         >
-          <ChevronRight className="hover:text-[#E50914] transition-all w-6 h-6 md:w-8 md:h-8" />
+          <ChevronRight
+            color="#ffffff"
+            className="hover:text-[#E50914] transition-all w-6 h-6 md:w-8 md:h-8"
+          />
         </button>
         <li className="hover:text-[#E50914] transition-all cursor-pointer">
           <a href="/" onClick={closeMenu}>
@@ -125,6 +196,7 @@ const Navbar = () => {
         <div className="w-full flex items-center text-[#ADADAD] focus-within:text-white">
           <Search
             title="Search"
+            color="#ffffff"
             className="absolute ml-2.5 w-6 h-6 pointer-events-none"
           />
           <input
@@ -132,8 +204,11 @@ const Navbar = () => {
             name="search"
             placeholder="Search"
             autoComplete="off"
+            value={query}
             className="w-full text-white placeholder-[#ADADAD] px-2.5 py-2 rounded-sm bg-[#4D0407] pl-11 border-none focus:outline-1 focus:outline-[#E50914]"
+            onChange={(e) => setQuery(e.target.value)}
           />
+          <SearchResults results={results} query={query} />
         </div>
       </div>
     </nav>
