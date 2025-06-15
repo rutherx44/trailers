@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import dayjs from "dayjs";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { SimilarTv } from "../components/Tv";
 import { Rating } from "../components/Rating";
 import { ChevronDown, Dot } from "lucide-react";
@@ -20,11 +20,12 @@ const TvDetails = () => {
   const [selectedSeason, setSelectedSeason] = useState(null);
   const [selectedEpisode, setSelectedEpisode] = useState(null);
   const { id } = useParams();
+  const navigate = useNavigate();
   const { showLoading, hideLoading } = useLoading();
 
   const BASE_URL = "https://api.themoviedb.org/3";
   const VITE_AUTH_KEY = import.meta.env.VITE_AUTH_KEY;
-  const fetchTvDetails = useRef(() => {});
+  const fetchTvDetails = useRef();
 
   const options = {
     params: { language: "en-US" },
@@ -38,13 +39,15 @@ const TvDetails = () => {
     try {
       showLoading();
       window.scrollTo({ top: 0, behavior: "smooth" });
-      setTimeout(async () => {
-        const { data } = await axios.get(`${BASE_URL}/tv/${id}`, options);
-        setTvDetails(data);
-        hideLoading();
-      }, 1500);
+
+      const { data } = await axios.get(`${BASE_URL}/tv/${id}`, options);
+      setTvDetails(data);
+
+      if (data.seasons?.length > 0) {
+        fetchSeasonDetails(data.seasons[0].season_number);
+      }
     } catch (error) {
-      console.error("Error fetching movie details:", error);
+      console.error("Error fetching TV details:", error);
       hideLoading();
     }
   };
@@ -59,8 +62,6 @@ const TvDetails = () => {
 
       if (data.episodes?.length > 0) {
         setSelectedEpisode(data.episodes[0]);
-      } else {
-        setSelectedEpisode(null);
       }
     } catch (error) {
       console.error("Error fetching season details:", error);
@@ -71,18 +72,16 @@ const TvDetails = () => {
     fetchTvDetails.current();
   }, [id]);
 
-  useEffect(() => {
-    if (tvDetails.seasons?.length > 0) {
-      fetchSeasonDetails(tvDetails.seasons[0].season_number);
-    }
-  }, [tvDetails]);
+  const handleSeasonClick = (season) => {
+    fetchSeasonDetails(season.season_number);
+    setSelectedSeason(season);
+    navigate(`/tv/${id}/season/${season.season_number}`);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const handleEpisodeClick = (episode) => {
     setSelectedEpisode(episode);
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -111,27 +110,25 @@ const TvDetails = () => {
               role="button"
               className="btn bg-transparent border-none outline-none shadow-none p-0 h-fit"
             >
-              <ChevronDown className="w-6 h-6 md:w-8 md:h-8" />
+              <ChevronDown color="#ffffff" className="w-6 h-6 md:w-8 md:h-8" />
             </div>
             <ul
               tabIndex={0}
-              className="dropdown-content flex flex-col items-end h-40 font-poppins gap-2 py-2.5 px-2.5 bg-transparent rounded-md z-1 backdrop-blur-xl overflow-auto"
+              className={`dropdown-content flex flex-col items-end font-poppins gap-2 py-2.5 px-2.5 bg-transparent rounded-md z-1 backdrop-blur-xl ${
+                tvDetails.seasons?.length > 5
+                  ? "max-h-40 overflow-y-auto"
+                  : "h-auto"
+              }`}
             >
               {tvDetails.seasons?.map((season) => (
                 <li
                   key={season.id}
-                  className={`cursor-pointer w-max text-[#adadad] px-2 py-1 transition-all rounded ${
+                  className={`cursor-pointer h-max w-max text-white px-2 py-1 transition-all rounded active:bg-[#E50914] ${
                     selectedSeason?.id === season.id
                       ? "bg-[#E50914] text-white"
                       : "hover:bg-[#4D0407] hover:text-white"
                   }`}
-                  onClick={() => {
-                    fetchSeasonDetails(season.season_number);
-                    window.scrollTo({
-                      top: 0,
-                      behavior: "smooth",
-                    });
-                  }}
+                  onClick={() => handleSeasonClick(season)}
                 >
                   {season.name}
                 </li>
@@ -215,7 +212,7 @@ const TvDetails = () => {
                   <span className="py-1 px-2.5 cursor-pointer border border-[#E50914] bg-[#490D0A] rounded-full text-white tracking-widest text-[0.5rem] md:text-[0.625rem] lg:text-xs">
                     {dayjs(tvDetails.release_date).format("YYYY")}
                   </span>
-                  <Dot />
+                  <Dot color="#ffffff" />
                   {tvDetails.genres &&
                     tvDetails.genres.slice(0, 2).map((genre, idx, arr) => (
                       <span key={idx} className="flex items-center">
@@ -224,7 +221,7 @@ const TvDetails = () => {
                         </span>
                         {idx < arr.length - 1 && (
                           <span className="text-white">
-                            <Dot />
+                            <Dot color="#ffffff" />
                           </span>
                         )}
                       </span>

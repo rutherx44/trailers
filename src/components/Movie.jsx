@@ -164,7 +164,7 @@ export const LatestMovie = () => {
       const moviesWithDetails = await Promise.all(movieDetailsPromises);
       setLatestMovie(moviesWithDetails);
     } catch (error) {
-      console.error("Error fetching trending movies:", error);
+      console.error("Error fetching popular movies:", error);
     }
   };
 
@@ -226,7 +226,7 @@ export const SimilarMovie = () => {
     try {
       const {
         data: { results },
-      } = await axios.get(`${BASE_URL}/movie/${id}/similar?`, options);
+      } = await axios.get(`${BASE_URL}/movie/${id}/recommendations?`, options);
 
       // Fetch genres and English backdrops for each movie
       const movieDetailsPromises = results.map(async (item) => {
@@ -260,7 +260,7 @@ export const SimilarMovie = () => {
       const moviesWithDetails = await Promise.all(movieDetailsPromises);
       setSimilarMovie(moviesWithDetails);
     } catch (error) {
-      console.error("Error fetching trending movies:", error);
+      console.error("Error fetching related movies:", error);
     }
   };
 

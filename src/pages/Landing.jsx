@@ -14,7 +14,7 @@ const Landing = () => {
         <section>
           <Hero />
         </section>
-        <section className="mt-20 flex flex-col gap-10 lg:gap-20">
+        <section className="flex flex-col gap-10 lg:gap-20">
           <div className="flex flex-col gap-5 lg:gap-10">
             <h1 className="font-poppins font-semibold tracking-wider text-lg border-l-4 border-[#E50914] pl-2 mx-4 md:mx-8 md:text-xl lg:mx-16 lg:text-2xl">
               TOP 10 MOVIES

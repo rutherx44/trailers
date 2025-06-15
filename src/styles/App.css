@@ -5,7 +5,7 @@
 :root, body {
   background-color: #180102;
   font-size: 1rem;
-  color: #ffffff; 
+  color: #ffffff;
 }
 
 html {
@@ -149,7 +149,7 @@ html {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #180102;
+  background: transparent;
 }
 
 /* Handle */

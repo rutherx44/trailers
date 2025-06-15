@@ -75,7 +75,7 @@ export const Tv = () => {
       const showsWithDetails = await Promise.all(showsDetailsPromises);
       setShows(showsWithDetails.filter(Boolean));
     } catch (error) {
-      console.error("Error fetching similar TV shows:", error);
+      console.error("Error fetching trending TV shows:", error);
     }
   };
 
@@ -103,7 +103,7 @@ export const Tv = () => {
               className="w-fit! pl-2.5 md:pl-3 lg:pl-3.5 xl:pl-4 cursor-pointer"
             >
               <Link
-                to={`/tv/${shows.id}/season/${shows.seasons[0].season_number}}`}
+                to={`/tv/${shows.id}/season/${shows.seasons[0].season_number}`}
               >
                 <TopMovieCard data={shows} num={idx} />
               </Link>
@@ -138,7 +138,7 @@ export const LatestTv = () => {
     try {
       const {
         data: { results },
-      } = await axios.get(`${BASE_URL}/tv/popular`, options);
+      } = await axios.get(`${BASE_URL}/tv/top_rated`, options);
 
       const showsDetailsPromises = results.map(async (item) => {
         try {
@@ -178,7 +178,7 @@ export const LatestTv = () => {
       const showsWithDetails = await Promise.all(showsDetailsPromises);
       setLatestShows(showsWithDetails.filter(Boolean));
     } catch (error) {
-      console.error("Error fetching similar TV shows:", error);
+      console.error("Error fetching popular TV shows:", error);
     }
   };
 
@@ -206,7 +206,7 @@ export const LatestTv = () => {
               className="w-fit! pl-2.5 md:pl-3 lg:pl-3.5 xl:pl-4 cursor-pointer"
             >
               <Link
-                to={`/tv/${shows.id}/season/${shows.seasons[0].season_number}}`}
+                to={`/tv/${shows.id}/season/${shows.seasons[0].season_number}`}
               >
                 <MovieCard data={shows} />
               </Link>
@@ -242,7 +242,7 @@ export const SimilarTv = () => {
     try {
       const {
         data: { results },
-      } = await axios.get(`${BASE_URL}/tv/${id}/similar?`, options);
+      } = await axios.get(`${BASE_URL}/tv/${id}/recommendations?`, options);
 
       const showsDetailsPromises = results.map(async (item) => {
         try {
@@ -282,7 +282,7 @@ export const SimilarTv = () => {
       const showsWithDetails = await Promise.all(showsDetailsPromises);
       setSimilarShows(showsWithDetails.filter(Boolean));
     } catch (error) {
-      console.error("Error fetching similar TV shows:", error);
+      console.error("Error fetching related TV shows:", error);
     }
   };
 
@@ -310,7 +310,7 @@ export const SimilarTv = () => {
               className="w-fit! pl-2.5 md:pl-3 lg:pl-3.5 xl:pl-4 cursor-pointer"
             >
               <Link
-                to={`/tv/${shows.id}/season/${shows.seasons[0].season_number}}`}
+                to={`/tv/${shows.id}/season/${shows.seasons[0].season_number}`}
               >
                 <MovieCard data={shows} />
               </Link>

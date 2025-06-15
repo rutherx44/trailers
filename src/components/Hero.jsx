@@ -28,6 +28,7 @@ const Hero = () => {
       Authorization: `Bearer ${VITE_AUTH_KEY}`,
     },
   };
+
   fetchMoviesBackdrop.current = async () => {
     try {
       const {
