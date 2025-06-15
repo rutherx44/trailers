@@ -1,42 +1,53 @@
 import React from "react";
+import { Link } from "react-router-dom"; // Make sure you import Link
+import { Rating } from "./Rating";
+import dayjs from "dayjs";
+import { Dot } from "lucide-react";
 
-const SearchResults = ({ results, query }) => {
+const SearchResults = ({ results, query, setShowResults }) => {
   if (!query || results.length === 0) return null;
 
   return (
-    <div className="absolute top-full mt-2 left-0 w-full bg-[#180102] rounded-lg shadow-lg z-50 p-4 space-y-4">
-      {results.slice(0, 5).map((item) => (
-        <div
-          key={item.id}
-          className="flex items-center gap-4 p-3 bg-[#2A0C0D] rounded-md"
-        >
-          <img
-            src={
-              item.englishBackdrop
-                ? item.englishBackdrop
-                : "https://via.placeholder.com/150x80?text=No+Image"
-            }
-            alt={item.title || item.name}
-            className="w-28 h-16 object-cover rounded"
-          />
-          <div className="flex flex-col text-white">
-            <h2 className="text-md font-semibold">{item.title || item.name}</h2>
-            <p className="text-sm text-[#ADADAD]">
-              {(item.release_date || item.first_air_date || "N/A").slice(0, 4)}{" "}
-              •{" "}
-              {item.media_type?.charAt(0).toUpperCase() +
-                item.media_type?.slice(1) || "Movie"}
-            </p>
-          </div>
-          {item.vote_average && (
-            <div className="ml-auto">
-              <div className="w-8 h-8 bg-black border-2 border-green-600 text-green-400 text-sm font-bold flex items-center justify-center rounded-full">
-                {item.vote_average.toFixed(1)}
+    <div className="absolute top-full left-0 w-full flex flex-col gap-6 bg-[#180102] shadow-lg z-4 p-4 rounded-b-xl">
+      {results.slice(0, 5).map((item) => {
+        const isTVShow = item.media_type === "tv";
+        const linkTo = isTVShow
+          ? `/tv/${item.id}/season/1`
+          : item.media_type === "movie"
+          ? `/movie/${item.id}`
+          : "#";
+
+        return (
+          <Link to={linkTo} key={item.id} onClick={() => setShowResults(false)}>
+            <div className="flex items-center justify-between gap-3 px-2">
+              <img
+                src={
+                  item.englishBackdrop
+                    ? `https://image.tmdb.org/t/p/original${item.englishBackdrop}`
+                    : "/no-image-landscape.svg"
+                }
+                alt={item.title || item.name}
+                className="w-[6.25rem] h-[3.5rem] md:w-[8.125rem] md:h-[4.5625rem] object-cover rounded border border-[#320204] transition-all"
+              />
+              <div className="flex flex-col w-full text-white font-poppins gap-1 truncate">
+                <div className="text-xs lg:text-sm font-semibold w-full truncate">
+                  {item.title || item.name}
+                </div>
+                <div className="flex items-center text-xs lg:text-sm text-[#ADADAD] uppercase">
+                  {dayjs(item.release_date || item.first_air_date).format(
+                    "YYYY"
+                  )}
+                  <Dot />
+                  {item.media_type}
+                </div>
+              </div>
+              <div className="w-fit">
+                <Rating rating={Number(item.vote_average).toFixed(1)} />
               </div>
             </div>
-          )}
-        </div>
-      ))}
+          </Link>
+        );
+      })}
     </div>
   );
 };
